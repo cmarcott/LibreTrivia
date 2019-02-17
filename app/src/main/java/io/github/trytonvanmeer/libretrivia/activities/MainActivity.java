@@ -33,17 +33,6 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean isNotDark = preferences.getBoolean("pref_dark_mode", true);
-
-        if(!isNotDark){
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-        }else{
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-        }
-
         buttonPlay.setOnClickListener(v -> {
             int amount = (int) spinnerNumber.getSelectedItem();
             TriviaCategory category = (TriviaCategory) spinnerCategory.getSelectedItem();
