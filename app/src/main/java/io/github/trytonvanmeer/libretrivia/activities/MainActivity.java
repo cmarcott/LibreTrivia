@@ -9,6 +9,7 @@ import android.widget.Spinner;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.github.trytonvanmeer.libretrivia.R;
+import io.github.trytonvanmeer.libretrivia.database.SQLiteDBHelper;
 import io.github.trytonvanmeer.libretrivia.trivia.TriviaCategory;
 import io.github.trytonvanmeer.libretrivia.trivia.TriviaDifficulty;
 import io.github.trytonvanmeer.libretrivia.trivia.TriviaQuery;
@@ -24,11 +25,14 @@ public class MainActivity extends BaseActivity {
     @BindView(R.id.spinner_difficulty)
     Spinner spinnerDifficulty;
 
+    //SQLiteDBHelper myDb;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        //myDb = new SQLiteDBHelper(this);
 
         buttonPlay.setOnClickListener(v -> {
             int amount = (int) spinnerNumber.getSelectedItem();
