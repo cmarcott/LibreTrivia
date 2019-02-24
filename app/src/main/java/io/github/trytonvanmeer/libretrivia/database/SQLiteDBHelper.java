@@ -1,12 +1,18 @@
 package io.github.trytonvanmeer.libretrivia.database;
 
+import java.util.ArrayList;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.ArrayList;
+
+import io.github.trytonvanmeer.libretrivia.util.TypeUtil;
+
 public class SQLiteDBHelper extends SQLiteOpenHelper {
+
     private static final int DATABASE_VERSION = 2;
     public static final String DATABASE_NAME = "Trivia_Local";
 
@@ -22,7 +28,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
     public static final String QUES_COLUMN_CATEGORY = "category";
     // The difficulty rating, ranging from 0-2
     public static final String QUES_COLUMN_DIFFICULTY = "difficulty";
-    // The type of the question, aka T/F or MC type question
+    // The type of the question, aka T/F (type 0) or MC (type 1) question
     public static final String QUES_COLUMN_TYPE = "type";
     // The four possible answers if multiple choice
     public static final String QUES_COLUMN_A1 = "a1";
@@ -42,7 +48,13 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
                 QUES_COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 QUES_COLUMN_QUESTION + " TEXT, " +
                 QUES_COLUMN_CATEGORY + " TEXT, " +
-                QUES_COLUMN_DIFFICULTY + " INT " + " )");
+                QUES_COLUMN_DIFFICULTY + " INT, " +
+                QUES_COLUMN_TYPE + " INT, " +
+                QUES_COLUMN_A1 + " TEXT, " +
+                QUES_COLUMN_A2 + " TEXT, " +
+                QUES_COLUMN_A3 + " TEXT, " +
+                QUES_COLUMN_A4 + " TEXT " +
+                " )");
     }
 
     @Override
@@ -55,18 +67,38 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
      * A method used to insert a new custom question into the stored local database
      * @param String question - The question being asked
      * @param String category - The category of the question
-     * @param int difficulty - The difficulty level the question is to be assigned
+     * @param Integer difficulty - The difficulty level the question is to be assigned, 0=EASY, 1=MEDIUM, 2=HARD
+     * @param Integer type - 0=T/F, 1=MC
+     * @param ArrayList<String> answers - Array of possible question answers. If True/False question, answer is in element 0 of arraylist as "True" or "False"
      * @return boolean result - false on failure, true on successful save
      */
-    public boolean insertCustomQuestion(String question, String category, Integer difficulty, String type, String answers) {
+    public boolean insertCustomQuestion(String question, String category, Integer difficulty, Integer type, ArrayList<String> answers) {
         SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(QUES_COLUMN_QUESTION, question);
-        contentValues.put(QUES_COLUMN_CATEGORY, category);
-        contentValues.put(QUES_COLUMN_DIFFICULTY, difficulty);
-        long result = db.insert(QUES_TABLE_NAME, null, contentValues);
+        ContentValues contentValues;
+        long result = -1;
 
-        if (result == -1) {
+        if (type == TypeUtil.TF_TYPE) {
+            contentValues = new ContentValues();
+            contentValues.put(QUES_COLUMN_QUESTION, question);
+            contentValues.put(QUES_COLUMN_CATEGORY, category);
+            contentValues.put(QUES_COLUMN_DIFFICULTY, difficulty);
+            contentValues.put(QUES_COLUMN_TYPE, type);
+            contentValues.put(QUES_COLUMN_A1, answers.get(0));
+            result = db.insert(QUES_TABLE_NAME, null, contentValues);
+        } else if (type == TypeUtil.MC_TYPE) {
+            contentValues = new ContentValues();
+            contentValues.put(QUES_COLUMN_QUESTION, question);
+            contentValues.put(QUES_COLUMN_CATEGORY, category);
+            contentValues.put(QUES_COLUMN_DIFFICULTY, difficulty);
+            contentValues.put(QUES_COLUMN_TYPE, type);
+            contentValues.put(QUES_COLUMN_A1, answers.get(0));
+            contentValues.put(QUES_COLUMN_A2, answers.get(1));
+            contentValues.put(QUES_COLUMN_A3, answers.get(2));
+            contentValues.put(QUES_COLUMN_A4, answers.get(3));
+            result = db.insert(QUES_TABLE_NAME, null, contentValues);
+        }
+
+        if (result == TypeUtil.RETURN_ERROR) {
             return false;
         } else {
             return true;
@@ -117,6 +149,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
     }
 
     /* updateCustomQuestion
+     * @depracated
      * Update a particular custom question based on id value
      * @param String id - The id of the question to be updated
      * @param String question - The question being asked
@@ -124,7 +157,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
      * @param int difficulty - The difficulty level the question is to be assigned
      * @return boolean result - false on failure, true on successful save
      */
-    public boolean updateCustomQuestion(String id, String question, String category, Integer difficulty) {
+    /*public boolean updateCustomQuestion(String id, String question, String category, Integer difficulty) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(QUES_COLUMN_ID, id);
@@ -133,7 +166,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         contentValues.put(QUES_COLUMN_DIFFICULTY, difficulty);
         db.update(QUES_TABLE_NAME, contentValues, "ID = ?", new String[] {id});
         return true;
-    }
+    }*/
 
     /* readCustomQuestions
      * Delete a custom question based on id value
