@@ -19,6 +19,7 @@ import butterknife.ButterKnife;
 import io.github.trytonvanmeer.libretrivia.R;
 import io.github.trytonvanmeer.libretrivia.activities.TriviaGameActivity;
 import io.github.trytonvanmeer.libretrivia.trivia.TriviaQuestion;
+import io.github.trytonvanmeer.libretrivia.trivia.TriviaQuestionBoolean;
 import io.github.trytonvanmeer.libretrivia.trivia.TriviaQuestionMultiple;
 
 
@@ -91,6 +92,13 @@ public class TriviaQuestionFragment extends Fragment {
         } else {
             buttonAnswerTrue.setOnClickListener(listener);
             buttonAnswerFalse.setOnClickListener(listener);
+
+            Boolean booleanAnswer = ((TriviaQuestionBoolean) question).getBooleanAnswer();
+            if (booleanAnswer) {
+                buttonAnswerCorrect = buttonAnswerTrue;
+            } else {
+                buttonAnswerCorrect = buttonAnswerFalse;
+            }
         }
     }
 
