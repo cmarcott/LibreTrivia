@@ -66,4 +66,6 @@
     <!-- Setting Strings-->
     <string name="pref_category_sound_title">Sound</string>
     <string name="pref_sound_answer_title">Answer Sound Effect</string>
+    <string name="pref_category_appearances_title">Appearances</string>
+    <string name="pref_dark_mode_title">Dark Mode</string>
 </resources>
