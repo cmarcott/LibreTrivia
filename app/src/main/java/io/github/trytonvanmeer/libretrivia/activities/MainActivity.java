@@ -6,6 +6,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.github.trytonvanmeer.libretrivia.R;
@@ -13,6 +16,7 @@ import io.github.trytonvanmeer.libretrivia.database.SQLiteDBHelper;
 import io.github.trytonvanmeer.libretrivia.trivia.TriviaCategory;
 import io.github.trytonvanmeer.libretrivia.trivia.TriviaDifficulty;
 import io.github.trytonvanmeer.libretrivia.trivia.TriviaQuery;
+import io.github.trytonvanmeer.libretrivia.util.TypeUtil;
 
 public class MainActivity extends BaseActivity {
 
@@ -33,7 +37,6 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         //myDb = new SQLiteDBHelper(this);
-
         buttonPlay.setOnClickListener(v -> {
             int amount = (int) spinnerNumber.getSelectedItem();
             TriviaCategory category = (TriviaCategory) spinnerCategory.getSelectedItem();

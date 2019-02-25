@@ -174,7 +174,16 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
      */
     public Integer deleteCustomQuestions(String id) {
         SQLiteDatabase db = this.getWritableDatabase();
-        return db.delete(QUES_TABLE_NAME, "ID = ?", new String[] {id});
+        return db.delete(QUES_TABLE_NAME, QUES_COLUMN_ID + " = ?", new String[] {id});
+    }
+
+    /* deleteAllCustomQuestions
+     * Deletes all custom questions in the database
+     * @return Integer - Returns the number of rows deleted
+     */
+    public Integer wipeCustomQuestions() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.delete(QUES_TABLE_NAME, null, null);
     }
 
 
