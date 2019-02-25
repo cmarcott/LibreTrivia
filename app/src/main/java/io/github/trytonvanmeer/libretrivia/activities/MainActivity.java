@@ -39,6 +39,8 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         //myDb = new SQLiteDBHelper(this);
+        //myDb.deleteAllCustomQuestions();
+
         buttonPlay.setOnClickListener(v -> {
             int amount = (int) spinnerNumber.getSelectedItem();
             TriviaCategory category = (TriviaCategory) spinnerCategory.getSelectedItem();

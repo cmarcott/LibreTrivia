@@ -65,6 +65,9 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
 
     /* insertCustomQuestion
      * A method used to insert a new custom question into the stored local database
+     * Sample Calls to insert a custom question:
+     *      myDb.insertCustomQuestion("Testing Question 1", "General Knowledge", TypeUtil.HARD, TypeUtil.TF_TYPE, new ArrayList<String>(Arrays.asList("False")));
+     *      myDb.insertCustomQuestion("Testing Question 2", "General Knowledge", TypeUtil.EASY, TypeUtil.MC_TYPE, new ArrayList<String>(Arrays.asList("Dogs", "Cats", "Antelope", "Birds")));
      * @param String question - The question being asked
      * @param String category - The category of the question
      * @param Integer difficulty - The difficulty level the question is to be assigned, 0=EASY, 1=MEDIUM, 2=HARD
@@ -181,7 +184,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
      * Deletes all custom questions in the database
      * @return Integer - Returns the number of rows deleted
      */
-    public Integer wipeCustomQuestions() {
+    public Integer deleteAllCustomQuestions() {
         SQLiteDatabase db = this.getWritableDatabase();
         return db.delete(QUES_TABLE_NAME, null, null);
     }
