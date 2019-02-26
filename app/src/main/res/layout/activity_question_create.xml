@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="io.github.trytonvanmeer.libretrivia.activities.MainActivity">
+    tools:context=".activities.QuestionCreateActivity">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -21,55 +21,57 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <!-- Select Amount -->
             <TextView
                 style="@style/TextLabel"
-                android:labelFor="@id/spinner_number"
-                android:text="@string/ui_amount" />
+                android:labelFor="@id/spinner_type"
+                android:text="@string/ui_type" />
 
             <Spinner
-                android:id="@+id/spinner_number"
+                android:id="@+id/spinner_type"
                 style="@style/Spinner" />
 
-            <!-- Select Category Spinner -->
             <TextView
                 style="@style/TextLabel"
-                android:labelFor="@id/spinner_category"
-                android:text="@string/ui_category" />
+                android:labelFor="@id/spinner_type"
+                android:text="@string/ui_create_category" />
 
             <Spinner
-                android:id="@+id/spinner_category"
+                android:id="@+id/spinner_create_category"
                 style="@style/Spinner" />
 
-            <!-- Select Difficulty Spinner -->
             <TextView
                 style="@style/TextLabel"
                 android:labelFor="@id/spinner_difficulty"
-                android:text="@string/ui_difficulty" />
+                android:text="Question Difficulty" />
 
             <Spinner
-                android:id="@+id/spinner_difficulty"
+                android:id="@+id/spinner_create_difficulty"
                 style="@style/Spinner" />
 
-            <!-- Play Button -->
-            <Button
-                android:id="@+id/button_play"
-                style="@style/Button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/ui_start_game"
-                android:textSize="24sp" />
+            <TextView
+                style="@style/TextLabel"
+                android:labelFor="@+id/question_text"
+                android:text="@string/ui_question_text" />
 
-            <!-- Play Button -->
-            <Button
-                android:id="@+id/button_create"
-                style="@style/Button"
+            <EditText
+                android:id="@+id/question_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="@string/ui_create_question"
-                android:textSize="24sp" />
+                android:hint="Question?"
+                android:autofillHints=""
+                android:inputType="textPersonName" />
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fillViewport="true">
+
+                <FrameLayout
+                    android:id="@+id/frame_create_type_question"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </ScrollView>
 
         </LinearLayout>
     </ScrollView>

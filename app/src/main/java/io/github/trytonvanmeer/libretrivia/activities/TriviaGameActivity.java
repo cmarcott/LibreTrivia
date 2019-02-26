@@ -165,8 +165,8 @@ public class TriviaGameActivity extends BaseActivity
         boolean guess = game.nextQuestion(answer.getText().toString());
 
         final int green = getResources().getColor(R.color.colorAccentGreen);
-        int color = guess ? green
-                : getResources().getColor(R.color.colorAccentRed);
+        final int red = getResources().getColor(R.color.colorAccentRed);
+        int color = guess ? green : red;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             ColorStateList stateList = ColorStateList.valueOf(color);
