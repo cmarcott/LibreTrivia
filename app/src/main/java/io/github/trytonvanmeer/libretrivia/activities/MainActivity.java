@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
@@ -17,9 +18,10 @@ import io.github.trytonvanmeer.libretrivia.trivia.TriviaDifficulty;
 import io.github.trytonvanmeer.libretrivia.trivia.TriviaQuery;
 
 public class MainActivity extends BaseActivity {
-
     @BindView(R.id.button_play)
     Button buttonPlay;
+    @BindView(R.id.button_create)
+    Button buttonCreate;
     @BindView(R.id.spinner_number)
     Spinner spinnerNumber;
     @BindView(R.id.spinner_category)
@@ -45,6 +47,12 @@ public class MainActivity extends BaseActivity {
 
             Intent intent = new Intent(getApplicationContext(), TriviaGameActivity.class);
             intent.putExtra(TriviaGameActivity.EXTRA_TRIVIA_QUERY, query);
+            startActivity(intent);
+        });
+
+        buttonCreate.setOnClickListener(v -> {
+            Log.d("CREATE QUESTION","Switching to create question.");
+            Intent intent = new Intent(getApplicationContext(), QuestionCreateActivity.class);
             startActivity(intent);
         });
 
