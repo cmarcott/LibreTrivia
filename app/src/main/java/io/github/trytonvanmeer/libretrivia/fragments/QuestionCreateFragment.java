@@ -80,6 +80,7 @@ public class QuestionCreateFragment extends Fragment {
                 QuestionCreateActivity parentActivity = (QuestionCreateActivity)getActivity();
                 String question = parentActivity.questionEditText.getText().toString();
                 String category = parentActivity.spinnerCategory.getSelectedItem().toString();
+                String difficulty = parentActivity.spinnerDiff.getSelectedItem().toString();
 
                 // Gather input from edit texts.
                 String correctAnswer = correctEditText.getText().toString();
@@ -124,6 +125,7 @@ public class QuestionCreateFragment extends Fragment {
                      */
 
                     Log.d("Q_CREATE", "\t" + question + "\n" +
+                            "\t" + difficulty + "\n" +
                             "\t" + category + "\n" +
                             "\t" + correctAnswer + "\n" +
                             "\t" + incorrectAnswer1 + "\n" +
@@ -157,6 +159,7 @@ public class QuestionCreateFragment extends Fragment {
                 QuestionCreateActivity parentActivity = (QuestionCreateActivity)getActivity();
                 String question = parentActivity.questionEditText.getText().toString();
                 String category = parentActivity.spinnerCategory.getSelectedItem().toString();
+                String difficulty = parentActivity.spinnerDiff.getSelectedItem().toString();
 
                 // Gather input from spinner.
                 String answer = spinnerBooleanAnswer.getSelectedItem().toString();
@@ -176,6 +179,7 @@ public class QuestionCreateFragment extends Fragment {
                      */
 
                     Log.d("Q_CREATE", "\t" + question + "\n" +
+                            "\t" + difficulty + "\n" +
                             "\t" + category + "\n" +
                             "\t" + answer);
                 }

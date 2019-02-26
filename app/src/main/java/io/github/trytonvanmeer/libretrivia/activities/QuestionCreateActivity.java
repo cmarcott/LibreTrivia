@@ -24,6 +24,8 @@ public class QuestionCreateActivity extends BaseActivity {
     Spinner spinnerType;
     @BindView(R.id.spinner_create_category)
     public Spinner spinnerCategory;
+    @BindView(R.id.spinner_create_difficulty)
+    public Spinner spinnerDiff;
     @BindView(R.id.question_text)
     public EditText questionEditText;
 
@@ -46,6 +48,18 @@ public class QuestionCreateActivity extends BaseActivity {
 
         typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerType.setAdapter(typeAdapter);
+
+        // Fill the difficulty spinner.
+        List<String> diffArray =  new ArrayList<String>();
+        diffArray.add("Easy");
+        diffArray.add("Medium");
+        diffArray.add("Hard");
+
+        ArrayAdapter<String> diffAdapter = new ArrayAdapter<String>(
+                this, android.R.layout.simple_list_item_1, diffArray);
+
+        diffAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerDiff.setAdapter(diffAdapter);
 
         // Listener for when the spinner is changed.
         spinnerType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

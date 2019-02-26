@@ -41,6 +41,15 @@
 
             <TextView
                 style="@style/TextLabel"
+                android:labelFor="@id/spinner_difficulty"
+                android:text="Question Difficulty" />
+
+            <Spinner
+                android:id="@+id/spinner_create_difficulty"
+                style="@style/Spinner" />
+
+            <TextView
+                style="@style/TextLabel"
                 android:labelFor="@+id/question_text"
                 android:text="@string/ui_question_text" />
 
