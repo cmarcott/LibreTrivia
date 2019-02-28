@@ -15,6 +15,14 @@ public class TriviaQuestionBoolean extends TriviaQuestion {
         this.correctAnswer = correctAnswer;
     }
 
+    /**
+     * Helper function to retrieve the correct answer.
+     * @author Lamonte Luong
+     */
+    public Boolean getBooleanAnswer() {
+        return Boolean.valueOf(correctAnswer);
+    }
+
     //see if user guess is correct
     @Override
     public boolean checkAnswer(String guess) {

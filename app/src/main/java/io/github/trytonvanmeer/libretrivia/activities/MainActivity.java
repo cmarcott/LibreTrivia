@@ -1,23 +1,32 @@
 package io.github.trytonvanmeer.libretrivia.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import androidx.appcompat.app.AppCompatDelegate;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.github.trytonvanmeer.libretrivia.R;
+import io.github.trytonvanmeer.libretrivia.database.SQLiteDBHelper;
 import io.github.trytonvanmeer.libretrivia.trivia.TriviaCategory;
 import io.github.trytonvanmeer.libretrivia.trivia.TriviaDifficulty;
 import io.github.trytonvanmeer.libretrivia.trivia.TriviaQuery;
+import io.github.trytonvanmeer.libretrivia.util.TypeUtil;
 
 //The setup screen for the game ("Classic mode" setup)
 public class MainActivity extends BaseActivity {
-
     @BindView(R.id.button_play)
     Button buttonPlay;
+    @BindView(R.id.button_create)
+    Button buttonCreate;
     @BindView(R.id.spinner_number)
     Spinner spinnerNumber;
     @BindView(R.id.spinner_category)
@@ -25,13 +34,15 @@ public class MainActivity extends BaseActivity {
     @BindView(R.id.spinner_difficulty)
     Spinner spinnerDifficulty;
 
-
      //initialization
+    //SQLiteDBHelper myDb;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        //myDb = new SQLiteDBHelper(this);
+        //myDb.deleteAllCustomQuestions();
 
         //handler for starting the game
         buttonPlay.setOnClickListener(v -> {
@@ -52,7 +63,17 @@ public class MainActivity extends BaseActivity {
             startActivity(intent);
         });
 
+<<<<<<< HEAD
         //set up input fields
+=======
+        buttonCreate.setOnClickListener(v -> {
+            Log.d("CREATE QUESTION","Switching to create question.");
+            Intent intent = new Intent(getApplicationContext(), QuestionCreateActivity.class);
+            startActivity(intent);
+        });
+
+
+>>>>>>> dev
         Integer[] numbers = new Integer[50];
         for (int i = 0; i < 50; ) {
             numbers[i] = ++i;

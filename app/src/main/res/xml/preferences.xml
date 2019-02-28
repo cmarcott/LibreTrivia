@@ -10,6 +10,19 @@
             android:key="@string/pref_sound_answer"
             android:title="@string/pref_sound_answer_title" />
 
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="@string/pref_category_appearance"
+        android:title="@string/pref_category_appearances_title">
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="@string/pref_dark_mode"
+            android:id="@+id/dark_mode"
+            android:title="@string/pref_dark_mode_title" />
+
     </PreferenceCategory>
 
 </PreferenceScreen>

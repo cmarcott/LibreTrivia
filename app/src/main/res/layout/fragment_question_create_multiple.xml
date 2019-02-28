@@ -1,0 +1,68 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            style="@style/TextLabel"
+            android:text="@string/ui_create_correct_header" />
+
+        <EditText
+            android:layout_marginTop="16dp"
+            android:id="@+id/correct_question_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Answer"
+            android:autofillHints=""
+            android:inputType="textPersonName" />
+
+        <TextView
+            style="@style/TextLabel"
+            android:text="@string/ui_create_incorrect_header" />
+
+        <EditText
+            android:layout_marginTop="16dp"
+            android:id="@+id/incorrect_question_input_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Wrong answer"
+            android:autofillHints=""
+            android:inputType="textPersonName" />
+        <EditText
+            android:layout_marginTop="16dp"
+            android:id="@+id/incorrect_question_input_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Wrong answer"
+            android:autofillHints=""
+            android:inputType="textPersonName" />
+        <EditText
+            android:layout_marginTop="16dp"
+            android:id="@+id/incorrect_question_input_3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Wrong answer"
+            android:autofillHints=""
+            android:inputType="textPersonName" />
+
+        <Button
+            android:id="@+id/multiple_submit"
+            style="@style/Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Submit Question"
+            android:textSize="24sp" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
