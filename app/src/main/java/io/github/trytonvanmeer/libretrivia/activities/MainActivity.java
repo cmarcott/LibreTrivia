@@ -63,9 +63,8 @@ public class MainActivity extends BaseActivity {
             startActivity(intent);
         });
 
-<<<<<<< HEAD
+
         //set up input fields
-=======
         buttonCreate.setOnClickListener(v -> {
             Log.d("CREATE QUESTION","Switching to create question.");
             Intent intent = new Intent(getApplicationContext(), QuestionCreateActivity.class);
@@ -73,7 +72,7 @@ public class MainActivity extends BaseActivity {
         });
 
 
->>>>>>> dev
+
         Integer[] numbers = new Integer[50];
         for (int i = 0; i < 50; ) {
             numbers[i] = ++i;
