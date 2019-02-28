@@ -9,6 +9,7 @@ import butterknife.ButterKnife;
 import io.github.trytonvanmeer.libretrivia.R;
 import io.github.trytonvanmeer.libretrivia.trivia.TriviaGame;
 
+//Shows the score after the quiz is finished
 public class TriviaGameResultsActivity extends BaseActivity {
     static final String EXTRA_TRIVIA_GAME = "extra_trivia_game";
 
@@ -21,12 +22,14 @@ public class TriviaGameResultsActivity extends BaseActivity {
     @BindView(R.id.button_return_to_menu)
     Button buttonReturnToMenu;
 
+    //Initialization
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trivia_game_results);
         ButterKnife.bind(this);
 
+        //get data passed from the game activity
         Bundle bundle = getIntent().getExtras();
         TriviaGame game = (TriviaGame) bundle.get(EXTRA_TRIVIA_GAME);
 
@@ -38,10 +41,12 @@ public class TriviaGameResultsActivity extends BaseActivity {
             }
         }
 
+        //display
         textResultsCorrect.setText(String.valueOf(correctTotal));
         textResultsWrong.setText(String.valueOf(game.getQuestionsCount() - correctTotal));
         textResultsTotal.setText(String.valueOf(game.getQuestionsCount()));
 
+        //Listener for return button
         buttonReturnToMenu.setOnClickListener(v -> finish());
     }
 }

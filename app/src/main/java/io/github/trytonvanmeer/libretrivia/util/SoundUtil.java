@@ -7,10 +7,12 @@ import android.preference.PreferenceManager;
 
 import io.github.trytonvanmeer.libretrivia.R;
 
+//Handles sound output
 public class SoundUtil {
     public static final int SOUND_ANSWER_CORRECT = R.raw.sound_answer_correct;
     public static final int SOUND_ANSWER_WRONG = R.raw.sound_answer_wrong;
 
+    //plays the given sound if the user's settings say sounds may be played
     public static void playSound(Context context, int sound) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         String key_sound = context.getResources().getString(R.string.pref_sound_answer);

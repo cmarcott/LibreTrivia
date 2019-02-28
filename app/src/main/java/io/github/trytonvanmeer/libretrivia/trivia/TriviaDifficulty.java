@@ -6,6 +6,7 @@ import java.util.Map;
 import io.github.trytonvanmeer.libretrivia.LibreTriviaApplication;
 import io.github.trytonvanmeer.libretrivia.R;
 
+//difficulty of a question
 public enum TriviaDifficulty {
     ANY("any", R.string.ui_any),
 

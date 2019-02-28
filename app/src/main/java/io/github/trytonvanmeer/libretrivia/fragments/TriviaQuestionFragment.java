@@ -21,7 +21,7 @@ import io.github.trytonvanmeer.libretrivia.activities.TriviaGameActivity;
 import io.github.trytonvanmeer.libretrivia.trivia.TriviaQuestion;
 import io.github.trytonvanmeer.libretrivia.trivia.TriviaQuestionMultiple;
 
-
+//Displays a  question and its answer options
 public class TriviaQuestionFragment extends Fragment {
 
     private static final int buttonAnswerOneID = R.id.button_answer_one;
@@ -45,6 +45,7 @@ public class TriviaQuestionFragment extends Fragment {
     public TriviaQuestionFragment() {
     }
 
+    //essentially a constructor
     public static TriviaQuestionFragment newInstance() {
         return new TriviaQuestionFragment();
     }
@@ -56,6 +57,7 @@ public class TriviaQuestionFragment extends Fragment {
         TriviaQuestion question = ((TriviaGameActivity) getActivity()).getCurrentQuestion();
         View view;
 
+        //create buttons
         if (question instanceof TriviaQuestionMultiple) {
             view = inflater.inflate(R.layout.fragment_trivia_question_multiple, container, false);
             ButterKnife.bind(this, view);
@@ -72,28 +74,32 @@ public class TriviaQuestionFragment extends Fragment {
         return view;
     }
 
+    //set listeners and text
     private void setupButtons() {
         AnswerButtonListener listener = new AnswerButtonListener();
         TriviaQuestion question = ((TriviaGameActivity) getActivity()).getCurrentQuestion();
 
         if (question instanceof TriviaQuestionMultiple) {
+            //get possible answers and randomize order
             List<String> answers = Arrays.asList((
                     (TriviaQuestionMultiple) question).getAnswerList());
             Collections.shuffle(answers);
 
             for (int i = 0; i < buttonAnswers.length; i++) {
                 buttonAnswers[i].setText(answers.get(i));
-                buttonAnswers[i].setOnClickListener(listener);
+                buttonAnswers[i].setOnClickListener(listener); //set listener
                 if (question.checkAnswer(answers.get(i))) {
                     buttonAnswerCorrect = buttonAnswers[i];
                 }
             }
         } else {
+            //text is known, just set listeners
             buttonAnswerTrue.setOnClickListener(listener);
             buttonAnswerFalse.setOnClickListener(listener);
         }
     }
 
+    //Avoid multiple answer clicks for the same question
     private void disableButtons() {
         TriviaQuestion question = ((TriviaGameActivity) getActivity()).getCurrentQuestion();
         if (question instanceof TriviaQuestionMultiple) {
@@ -107,6 +113,7 @@ public class TriviaQuestionFragment extends Fragment {
         }
     }
 
+    //disables buttons, then checks user answer
     private class AnswerButtonListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {

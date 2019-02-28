@@ -32,8 +32,9 @@ import io.github.trytonvanmeer.libretrivia.trivia.TriviaQuestion;
 import io.github.trytonvanmeer.libretrivia.util.ApiUtil;
 import io.github.trytonvanmeer.libretrivia.util.SoundUtil;
 
+//Gets and runs through the questions for the quiz
 public class TriviaGameActivity extends BaseActivity
-        implements IDownloadTriviaQuestionReceiver {
+        implements IDownloadTriviaQuestionReceiver { //this means it is able to recieve questions from openTDB
     static final String EXTRA_TRIVIA_QUERY = "extra_trivia_query";
     private final String STATE_TRIVIA_GAME = "state_trivia_game";
 
@@ -50,6 +51,7 @@ public class TriviaGameActivity extends BaseActivity
     @BindView(R.id.text_question_progress)
     TextView textViewQuestionProgress;
 
+     //initialization
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,33 +59,41 @@ public class TriviaGameActivity extends BaseActivity
         ButterKnife.bind(this);
 
         if (savedInstanceState != null) {
+            //reload state if we had navigated away and back
             this.game = (TriviaGame) savedInstanceState.getSerializable(STATE_TRIVIA_GAME);
         } else {
+            //if this is a new game and not something we're re-entering, we need setup
             Bundle bundle = getIntent().getExtras();
             assert bundle != null;
+            //get the query passed from MainActivity
             TriviaQuery query = (TriviaQuery) bundle.get(EXTRA_TRIVIA_QUERY);
 
             progressBar.setVisibility(View.VISIBLE);
 
+            //Get the trivia questions in asynchronous task
             DownloadTriviaQuestionsTask task = new DownloadTriviaQuestionsTask();
             task.setReceiver(this);
             task.execute(query);
         }
     }
 
+     //takes care of saving if we navigate away
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putSerializable(STATE_TRIVIA_GAME, this.game);
     }
 
+     //what to do if phone back button is pressed
     @Override
     public void onBackPressed() {
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.frame_trivia_game);
 
         if (fragment instanceof TriviaGameErrorFragment) {
+            //If we're on the error screen, simply go back to MainActivity
             super.onBackPressed();
         } else {
+             //Confirm exiting if in the middle of the game. On yes, go back to MainActivity, else remain in the quiz
             new AlertDialog.Builder(this)
                     .setTitle(R.string.ui_quit_game)
                     .setMessage(R.string.ui_quit_game_msg)
@@ -95,14 +105,18 @@ public class TriviaGameActivity extends BaseActivity
         }
     }
 
+    //Executed when the query returns.  Implementation for IDownloadTriviaQuestionReciever
     public void onTriviaQuestionsDownloaded(String json) {
         if (json == null) {
+            //Opens an error page
             onNetworkError();
             return;
         } else {
             try {
+                //set up game from the questions returned
                 this.game = new TriviaGame(ApiUtil.jsonToQuestionArray(json));
             } catch (NoTriviaResultsException e) {
+                //opens an error page
                 onNoTriviaResults();
                 return;
             }
@@ -115,7 +129,9 @@ public class TriviaGameActivity extends BaseActivity
         updateTriviaQuestion();
     }
 
+    //Updates question#, category, difficulty when moving to next question
     private void updateStatusBar() {
+        //get data
         String progress = getResources().getString(R.string.ui_question_progress,
                 game.getQuestionProgress(), game.getQuestionsCount());
 
@@ -123,12 +139,14 @@ public class TriviaGameActivity extends BaseActivity
                 ? game.getCurrentQuestion().getCategory().toString() : "";
 
         String difficulty = game.getCurrentQuestion().getDifficulty().toString();
-
+        
+        //display
         textViewQuestionProgress.setText(progress);
         textViewQuestionCategory.setText(category);
         textViewQuestionDifficulty.setText(difficulty);
     }
 
+    //Update to the next question
     private void updateTriviaQuestion() {
         Fragment fragment = TriviaQuestionFragment.newInstance();
         getSupportFragmentManager().beginTransaction()
@@ -137,6 +155,7 @@ public class TriviaGameActivity extends BaseActivity
                 .commit();
     }
 
+    //Display an error message for if there is an error while trying to get data from openTDB
     private void onNetworkError() {
         String msg = getResources().getString(R.string.error_network);
         Fragment errorFragment = TriviaGameErrorFragment.newInstance(msg);
@@ -147,6 +166,7 @@ public class TriviaGameActivity extends BaseActivity
         ft.commit();
     }
 
+    //Display an error message for if the query completed properly but returned with no questions
     private void onNoTriviaResults() {
         String msg = getResources().getString(R.string.error_no_trivia_results);
         Fragment errorFragment = TriviaGameErrorFragment.newInstance(msg);
@@ -161,9 +181,12 @@ public class TriviaGameActivity extends BaseActivity
         return this.game.getCurrentQuestion();
     }
 
+    //Handler for clicking any answer
     public void onAnswerClick(Button answer, Button correctAnswer) {
+        //get user guess
         boolean guess = game.nextQuestion(answer.getText().toString());
 
+        //colour green if correct, red if wrong
         final int green = getResources().getColor(R.color.colorAccentGreen);
         int color = guess ? green
                 : getResources().getColor(R.color.colorAccentRed);
@@ -185,25 +208,31 @@ public class TriviaGameActivity extends BaseActivity
                         new PorterDuffColorFilter(green, PorterDuff.Mode.MULTIPLY));
         }
 
+        //send appropriate sound to be output
         SoundUtil.playSound(this, guess ?
                 SoundUtil.SOUND_ANSWER_CORRECT : SoundUtil.SOUND_ANSWER_WRONG);
 
+        //delays for a while so the correctness of the answer can be observed
         new Handler().postDelayed(() -> {
             if (game.isDone()) {
+                //open the results activity if there are no more questions
                 Intent intent = new Intent(getApplicationContext(), TriviaGameResultsActivity.class);
                 intent.putExtra(TriviaGameResultsActivity.EXTRA_TRIVIA_GAME, game);
                 startActivity(intent);
                 finish();
             } else {
+                //otherwise move to the next question
                 updateStatusBar();
                 updateTriviaQuestion();
             }
-        }, 500);
+        }, 500); //delay value
     }
 
+    //Takes care of internet communication in a background thread
     private static class DownloadTriviaQuestionsTask extends AsyncTask<TriviaQuery, Integer, String> {
         private IDownloadTriviaQuestionReceiver receiver;
 
+        //executes the query
         @Override
         protected String doInBackground(TriviaQuery... query) {
             String json;
@@ -215,11 +244,13 @@ public class TriviaGameActivity extends BaseActivity
             return json;
         }
 
+        //calls the reciever's handler to deal with the query result
         @Override
         protected void onPostExecute(String json) {
             receiver.onTriviaQuestionsDownloaded(json);
         }
 
+        //designates what will receive the query results
         private void setReceiver(IDownloadTriviaQuestionReceiver receiver) {
             this.receiver = receiver;
         }

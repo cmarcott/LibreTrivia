@@ -13,6 +13,7 @@ import io.github.trytonvanmeer.libretrivia.trivia.TriviaCategory;
 import io.github.trytonvanmeer.libretrivia.trivia.TriviaDifficulty;
 import io.github.trytonvanmeer.libretrivia.trivia.TriviaQuery;
 
+//The setup screen for the game ("Classic mode" setup)
 public class MainActivity extends BaseActivity {
 
     @BindView(R.id.button_play)
@@ -24,28 +25,34 @@ public class MainActivity extends BaseActivity {
     @BindView(R.id.spinner_difficulty)
     Spinner spinnerDifficulty;
 
+
+     //initialization
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+        //handler for starting the game
         buttonPlay.setOnClickListener(v -> {
+            //read from input fields
             int amount = (int) spinnerNumber.getSelectedItem();
             TriviaCategory category = (TriviaCategory) spinnerCategory.getSelectedItem();
             TriviaDifficulty difficulty = (TriviaDifficulty) spinnerDifficulty.getSelectedItem();
 
+            //Create the query for the openTDB database
             TriviaQuery query = new TriviaQuery.Builder(amount)
                     .category(category)
                     .difficulty(difficulty)
                     .build();
 
+            //start the trivia game activity, passing it the query
             Intent intent = new Intent(getApplicationContext(), TriviaGameActivity.class);
             intent.putExtra(TriviaGameActivity.EXTRA_TRIVIA_QUERY, query);
             startActivity(intent);
         });
 
-
+        //set up input fields
         Integer[] numbers = new Integer[50];
         for (int i = 0; i < 50; ) {
             numbers[i] = ++i;

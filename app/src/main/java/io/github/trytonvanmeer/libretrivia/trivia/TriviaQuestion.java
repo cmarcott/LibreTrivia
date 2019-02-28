@@ -2,6 +2,7 @@ package io.github.trytonvanmeer.libretrivia.trivia;
 
 import java.io.Serializable;
 
+//superclass for MC and T/F questions
 public abstract class TriviaQuestion implements Serializable {
     private final TriviaCategory category;
     private final TriviaDifficulty difficulty;
