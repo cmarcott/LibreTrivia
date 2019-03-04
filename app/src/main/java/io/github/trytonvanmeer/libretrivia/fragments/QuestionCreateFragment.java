@@ -18,12 +18,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import butterknife.ButterKnife;
 import io.github.trytonvanmeer.libretrivia.R;
+import io.github.trytonvanmeer.libretrivia.activities.BaseActivity;
 import io.github.trytonvanmeer.libretrivia.activities.QuestionCreateActivity;
+import io.github.trytonvanmeer.libretrivia.util.TypeUtil;
 
 
 public class QuestionCreateFragment extends Fragment {
@@ -121,8 +125,22 @@ public class QuestionCreateFragment extends Fragment {
                 if(valid){
 
                     /*
-                    Stub for sending data to the backend.
+                    Store MC Question in database
                      */
+                    Integer diff = null;
+                    switch (difficulty) {
+                        case "Easy":
+                            diff = TypeUtil.EASY;
+                            break;
+                        case "Medium":
+                            diff = TypeUtil.MEDIUM;
+                            break;
+                        case "Hard":
+                            diff = TypeUtil.HARD;
+                            break;
+                    }
+                    // Uncomment when view returns to main page
+                    //BaseActivity.myDb.insertCustomQuestion(question, category, diff, TypeUtil.MC_TYPE, new ArrayList<String>(Arrays.asList(correctAnswer, incorrectAnswer1, incorrectAnswer2, incorrectAnswer3)));
 
                     Log.d("Q_CREATE", "\t" + question + "\n" +
                             "\t" + difficulty + "\n" +
@@ -175,8 +193,23 @@ public class QuestionCreateFragment extends Fragment {
                 if(valid){
 
                     /*
-                    Stub for sending data to the backend.
+                    Store T/F question in database
                      */
+                    Integer diff = null;
+                    switch (difficulty) {
+                        case "Easy":
+                            diff = TypeUtil.EASY;
+                            break;
+                        case "Medium":
+                            diff = TypeUtil.MEDIUM;
+                            break;
+                        case "Hard":
+                            diff = TypeUtil.HARD;
+                            break;
+                    }
+
+                    // Uncomment when view returns to main page
+                    //BaseActivity.myDb.insertCustomQuestion(question, category, diff, TypeUtil.TF_TYPE, new ArrayList<String>(Arrays.asList(answer)));
 
                     Log.d("Q_CREATE", "\t" + question + "\n" +
                             "\t" + difficulty + "\n" +

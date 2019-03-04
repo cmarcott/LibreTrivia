@@ -34,15 +34,11 @@ public class MainActivity extends BaseActivity {
     @BindView(R.id.spinner_difficulty)
     Spinner spinnerDifficulty;
 
-     //initialization
-    //SQLiteDBHelper myDb;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        //myDb = new SQLiteDBHelper(this);
-        //myDb.deleteAllCustomQuestions();
 
         //handler for starting the game
         buttonPlay.setOnClickListener(v -> {
