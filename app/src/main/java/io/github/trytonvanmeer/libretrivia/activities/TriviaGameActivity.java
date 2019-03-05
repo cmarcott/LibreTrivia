@@ -168,14 +168,24 @@ public class TriviaGameActivity extends BaseActivity
 
     //Display an error message for if the query completed properly but returned with no questions
     private void onNoTriviaResults() {
-        String msg = getResources().getString(R.string.error_no_trivia_results);
-        Fragment errorFragment = TriviaGameErrorFragment.newInstance(msg);
+        //String msg = getResources().getString(R.string.error_no_trivia_results);
+        //Fragment errorFragment = TriviaGameErrorFragment.newInstance(msg);
 
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.frame_trivia_game, errorFragment);
-        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-        ft.commit();
+        //FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        //ft.replace(R.id.frame_trivia_game, errorFragment);
+        //ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        //ft.commit();
+
+        new AlertDialog.Builder(this)
+                .setTitle("Not enough questions")
+                .setMessage("There weren't enough questions matching your filters. Please ask for fewer questions or broaden your game settings.")
+                .setPositiveButton("OK", (dialog, which) ->
+                        TriviaGameActivity.super.onBackPressed())
+                .show();
     }
+
+    //Asks the user if they wish to continue with the game if they have fewer questions than they wanted
+
 
     public TriviaQuestion getCurrentQuestion() {
         return this.game.getCurrentQuestion();
