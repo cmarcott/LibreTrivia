@@ -140,7 +140,7 @@ public class QuestionCreateFragment extends Fragment {
                             break;
                     }
                     // Uncomment when view returns to main page
-                    //BaseActivity.myDb.insertCustomQuestion(question, category, diff, TypeUtil.MC_TYPE, new ArrayList<String>(Arrays.asList(correctAnswer, incorrectAnswer1, incorrectAnswer2, incorrectAnswer3)));
+                    BaseActivity.myDb.insertCustomQuestion(question, category, diff, TypeUtil.MC_TYPE, new ArrayList<String>(Arrays.asList(correctAnswer, incorrectAnswer1, incorrectAnswer2, incorrectAnswer3)));
 
                     Log.d("Q_CREATE", "\t" + question + "\n" +
                             "\t" + difficulty + "\n" +
@@ -150,6 +150,7 @@ public class QuestionCreateFragment extends Fragment {
                             "\t" + incorrectAnswer2 + "\n" +
                             "\t" + incorrectAnswer3);
 
+                    getActivity().onBackPressed();
                 }
             });
         } else {
@@ -209,12 +210,14 @@ public class QuestionCreateFragment extends Fragment {
                     }
 
                     // Uncomment when view returns to main page
-                    //BaseActivity.myDb.insertCustomQuestion(question, category, diff, TypeUtil.TF_TYPE, new ArrayList<String>(Arrays.asList(answer)));
+                    BaseActivity.myDb.insertCustomQuestion(question, category, diff, TypeUtil.TF_TYPE, new ArrayList<String>(Arrays.asList(answer)));
 
                     Log.d("Q_CREATE", "\t" + question + "\n" +
                             "\t" + difficulty + "\n" +
                             "\t" + category + "\n" +
                             "\t" + answer);
+
+                    getActivity().onBackPressed();
                 }
 
             });
