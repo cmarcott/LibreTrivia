@@ -2,6 +2,7 @@ package io.github.trytonvanmeer.libretrivia.trivia;
 
 import java.io.Serializable;
 
+//Holds data necessary to mak a query to openTDB
 public class TriviaQuery implements Serializable {
     private static final String BASE = "https://opentdb.com/api.php?";
     private static final int DEFAULT_AMOUNT = 10;
@@ -18,6 +19,7 @@ public class TriviaQuery implements Serializable {
         this.type = builder.type;
     }
 
+    //handles value-checking for query creation
     public static class Builder {
         private final int amount;
         private TriviaCategory category;
@@ -28,6 +30,7 @@ public class TriviaQuery implements Serializable {
             this.amount = DEFAULT_AMOUNT;
         }
 
+        //cap quiz at 50 questions
         public Builder(int amount) {
             if (amount > 50) {
                 this.amount = 50;
@@ -56,11 +59,12 @@ public class TriviaQuery implements Serializable {
         }
     }
 
+    //turns the query object into a url
     @Override
     public String toString() {
         StringBuilder url = new StringBuilder();
 
-        url.append(BASE);
+        url.append(BASE);//openTDB URL
         url.append("amount=").append(this.amount);
 
         if (this.category != null & this.category != TriviaCategory.ANY) {

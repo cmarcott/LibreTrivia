@@ -6,6 +6,7 @@ import java.util.Map;
 import io.github.trytonvanmeer.libretrivia.LibreTriviaApplication;
 import io.github.trytonvanmeer.libretrivia.R;
 
+//question format: MC or T/F
 public enum TriviaType {
     ANY("any", R.string.ui_any),
 

@@ -5,6 +5,7 @@ import android.text.Html;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+//Multiple choice question
 public class TriviaQuestionMultiple extends TriviaQuestion {
     private final String correctAnswer;
     private final String[] incorrectAnswers;
@@ -17,6 +18,7 @@ public class TriviaQuestionMultiple extends TriviaQuestion {
         this.incorrectAnswers = incorrectAnswers;
     }
 
+    //merges and returns correct and wrong answers
     public String[] getAnswerList() {
         return new String[]{correctAnswer,
                 incorrectAnswers[0],
@@ -24,11 +26,13 @@ public class TriviaQuestionMultiple extends TriviaQuestion {
                 incorrectAnswers[2]};
     }
 
+    //check if user guess is correct
     @Override
     public boolean checkAnswer(String guess) {
         return this.correctAnswer.equals(guess);
     }
 
+    //parses a question from a JSON object
     public static TriviaQuestionMultiple fromJson(JsonObject json) {
         TriviaCategory category = TriviaCategory.get(json.get("category").getAsString());
         TriviaDifficulty difficulty = TriviaDifficulty.get(json.get("difficulty").getAsString());

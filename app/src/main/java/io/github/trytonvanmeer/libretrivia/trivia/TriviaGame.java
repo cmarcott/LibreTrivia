@@ -3,6 +3,7 @@ package io.github.trytonvanmeer.libretrivia.trivia;
 import java.io.Serializable;
 import java.util.List;
 
+//holds questions, results, state of a trivia game
 public class TriviaGame implements Serializable {
     private int currentQuestion;
     private final boolean[] results;
@@ -18,10 +19,12 @@ public class TriviaGame implements Serializable {
         return this.questions.get(currentQuestion);
     }
 
+     //get current question number
     public int getQuestionProgress() {
         return this.currentQuestion + 1;
     }
 
+    //get # of questions in the quiz
     public int getQuestionsCount() {
         return this.questions.size();
     }
@@ -30,6 +33,7 @@ public class TriviaGame implements Serializable {
         return this.results;
     }
 
+    //check answer, store result, move to next question
     public boolean nextQuestion(String guess) {
         TriviaQuestion question = getCurrentQuestion();
         boolean answer = question.checkAnswer(guess);
@@ -40,6 +44,7 @@ public class TriviaGame implements Serializable {
         return answer;
     }
 
+     //returns true iff there are no more questions to answer
     public boolean isDone() {
         return (this.currentQuestion == questions.size());
     }

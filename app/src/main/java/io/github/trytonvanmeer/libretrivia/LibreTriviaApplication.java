@@ -4,7 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
 
-
+//essentially a wrapper for application. Extending application is discouraged by Google
 public class LibreTriviaApplication extends Application {
     @SuppressLint("StaticFieldLeak")
     private static Context context;

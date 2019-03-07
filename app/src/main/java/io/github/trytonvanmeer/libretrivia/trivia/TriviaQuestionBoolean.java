@@ -4,6 +4,7 @@ import android.text.Html;
 
 import com.google.gson.JsonObject;
 
+//True/false question
 public class TriviaQuestionBoolean extends TriviaQuestion {
 
     private final Boolean correctAnswer;
@@ -14,15 +15,26 @@ public class TriviaQuestionBoolean extends TriviaQuestion {
         this.correctAnswer = correctAnswer;
     }
 
+    /**
+     * Helper function to retrieve the correct answer.
+     * @author Lamonte Luong
+     */
+    public Boolean getBooleanAnswer() {
+        return Boolean.valueOf(correctAnswer);
+    }
+
+    //see if user guess is correct
     @Override
     public boolean checkAnswer(String guess) {
         return this.correctAnswer.equals(Boolean.valueOf(guess));
     }
 
+    //see if user guess is correct
     public boolean checkAnswer(Boolean guess) {
         return checkAnswer(guess.toString());
     }
 
+    //Parse a question from a JSON object
     public static TriviaQuestionBoolean fromJson(JsonObject json) {
         TriviaCategory category = TriviaCategory.get(json.get("category").getAsString());
         TriviaDifficulty difficulty = TriviaDifficulty.get(json.get("difficulty").getAsString());

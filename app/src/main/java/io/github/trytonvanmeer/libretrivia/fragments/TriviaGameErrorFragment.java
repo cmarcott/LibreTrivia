@@ -12,6 +12,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.github.trytonvanmeer.libretrivia.R;
 
+//allows an error message and frowny face to be displayed
 public class TriviaGameErrorFragment extends Fragment {
     private final static String ARG_ERROR_MSG = "arg_error_msg";
 
@@ -21,6 +22,7 @@ public class TriviaGameErrorFragment extends Fragment {
     public TriviaGameErrorFragment() {
     }
 
+    //essentially a constructor
     public static TriviaGameErrorFragment newInstance(String msg) {
         Bundle args = new Bundle();
         args.putString(ARG_ERROR_MSG, msg);
@@ -30,12 +32,14 @@ public class TriviaGameErrorFragment extends Fragment {
         return fragment;
     }
 
+     //initialization
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_trivia_game_error, container, false);
         ButterKnife.bind(this, view);
 
+         //show error message
         Bundle args;
         if ((args = getArguments()) != null) {
             textView.setText(args.getString(ARG_ERROR_MSG));

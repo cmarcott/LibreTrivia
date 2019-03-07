@@ -21,8 +21,10 @@ import io.github.trytonvanmeer.libretrivia.trivia.TriviaQuestionBoolean;
 import io.github.trytonvanmeer.libretrivia.trivia.TriviaQuestionMultiple;
 import io.github.trytonvanmeer.libretrivia.trivia.TriviaType;
 
+//utilities for executing a query to openTDB
 public class ApiUtil {
 
+    //reads the results generated from the query
     private static String readStream(InputStream in) throws IOException {
         StringBuilder builder = new StringBuilder();
         BufferedReader reader = new BufferedReader(new InputStreamReader(in), 1000);
@@ -35,12 +37,15 @@ public class ApiUtil {
         return builder.toString();
     }
 
+    //executes the query
     private static String GET(String query) throws IOException {
         String response;
 
+        //open connection
         URL url = new URL(query);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
+        //read response
         try {
             InputStream in = new BufferedInputStream(connection.getInputStream());
             response = readStream(in);
@@ -51,10 +56,12 @@ public class ApiUtil {
         return response;
     }
 
+    //Executes the query
     public static String GET(TriviaQuery query) throws IOException {
         return GET(query.toString());
     }
 
+    //parses the response into a list of questions
     public static ArrayList<TriviaQuestion> jsonToQuestionArray(String json) throws NoTriviaResultsException {
         JsonObject jsonObject = new JsonParser().parse(json).getAsJsonObject();
 
@@ -62,10 +69,12 @@ public class ApiUtil {
             throw new NoTriviaResultsException();
         }
 
+        //split the questions into a JSON array
         JsonArray jsonArray = jsonObject.getAsJsonArray("results");
 
         ArrayList<TriviaQuestion> questions = new ArrayList<>();
 
+        //read each question in the array
         for (JsonElement element : jsonArray) {
             JsonObject object = element.getAsJsonObject();
             TriviaType type = TriviaType.get(object.get("type").getAsString());
