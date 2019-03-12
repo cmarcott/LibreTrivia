@@ -12,8 +12,8 @@
     <Button
         android:id="@+id/button_classic_mode"
         style="@style/Button"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="185dp"
+        android:layout_height="70dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="481dp"
         android:layout_marginEnd="39dp"
@@ -30,8 +30,8 @@
     <Button
         android:id="@+id/button_custom_mode"
         style="@style/Button"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="185dp"
+        android:layout_height="70dp"
         android:layout_marginTop="481dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="38dp"
@@ -47,8 +47,8 @@
     <Button
         android:id="@+id/button_high_score"
         style="@style/Button"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="185dp"
+        android:layout_height="70dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="39dp"
         android:layout_marginBottom="72dp"
@@ -64,8 +64,8 @@
     <Button
         android:id="@+id/button2"
         style="@style/Button"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="185dp"
+        android:layout_height="70dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="72dp"
         android:background="@drawable/btn_rounded"
