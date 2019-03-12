@@ -10,7 +10,9 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true">
+        android:fillViewport="true"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -41,7 +43,7 @@
 
             <TextView
                 style="@style/TextLabel"
-                android:labelFor="@id/spinner_difficulty"
+                android:labelFor="@id/spinner_create_difficulty"
                 android:text="Question Difficulty" />
 
             <Spinner
@@ -58,8 +60,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:hint="Question?"
                 android:autofillHints=""
+                android:hint="Question?"
                 android:inputType="textPersonName" />
 
             <ScrollView
