@@ -21,28 +21,24 @@ import io.github.trytonvanmeer.libretrivia.trivia.TriviaDifficulty;
 import io.github.trytonvanmeer.libretrivia.trivia.TriviaQuery;
 import io.github.trytonvanmeer.libretrivia.util.TypeUtil;
 
-//The landing screen to choose game modes
-public class MainActivity extends BaseActivity {
-    @BindView(R.id.button_classic_mode)
-    Button buttonClassicMode;
-    @BindView(R.id.button_custom_mode)
-    Button buttonCustomMode;
+//Custom Mode game setup screen
+public class CustomModeActivity extends BaseActivity {
+    @BindView(R.id.button_create_question)
+    Button buttonCreateQuestion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_custom_mode);
         ButterKnife.bind(this);
 
-        buttonClassicMode.setOnClickListener(v -> {
-            Intent intent = new Intent(getApplicationContext(), ClassicModeActivity.class);
+        //set up input fields
+        buttonCreateQuestion.setOnClickListener(v -> {
+            Log.d("CREATE QUESTION","Switching to create question.");
+            Intent intent = new Intent(getApplicationContext(), QuestionCreateActivity.class);
             startActivity(intent);
         });
 
-        buttonCustomMode.setOnClickListener(v -> {
-            Intent intent = new Intent(getApplicationContext(), CustomModeActivity.class);
-            startActivity(intent);
-        });
 
     }
 }
