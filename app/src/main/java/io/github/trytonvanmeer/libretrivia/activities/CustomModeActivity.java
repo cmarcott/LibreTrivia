@@ -25,6 +25,8 @@ import io.github.trytonvanmeer.libretrivia.util.TypeUtil;
 public class CustomModeActivity extends BaseActivity {
     @BindView(R.id.button_create_question)
     Button buttonCreateQuestion;
+    @BindView(R.id.button_view_question)
+    Button buttonViewQuestion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,10 +34,16 @@ public class CustomModeActivity extends BaseActivity {
         setContentView(R.layout.activity_custom_mode);
         ButterKnife.bind(this);
 
-        //set up input fields
+        // Set up input fields.
         buttonCreateQuestion.setOnClickListener(v -> {
             Log.d("CREATE QUESTION","Switching to create question.");
             Intent intent = new Intent(getApplicationContext(), QuestionCreateActivity.class);
+            startActivity(intent);
+        });
+
+        buttonViewQuestion.setOnClickListener(v -> {
+            Log.d("CREATE QUESTION","Switching to view question.");
+            Intent intent = new Intent(getApplicationContext(), QuestionViewActivity.class);
             startActivity(intent);
         });
 
