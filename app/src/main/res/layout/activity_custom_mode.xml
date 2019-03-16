@@ -57,7 +57,7 @@ tools:context="io.github.trytonvanmeer.libretrivia.activities.CustomModeActivity
                 style="@style/Button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="20dp"
                 android:background="@drawable/btn_rounded"
                 android:text="@string/ui_start_game"
                 android:textSize="24sp" />
@@ -67,9 +67,23 @@ tools:context="io.github.trytonvanmeer.libretrivia.activities.CustomModeActivity
                 style="@style/Button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="20dp"
                 android:background="@drawable/btn_rounded"
                 android:text="@string/ui_create_question"
+                android:textSize="24sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                />
+
+            <Button
+                android:id="@+id/button_view_questions"
+                style="@style/Button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/btn_rounded"
+                android:text="@string/ui_view_questions"
                 android:textSize="24sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
