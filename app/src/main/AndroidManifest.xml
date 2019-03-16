@@ -23,6 +23,8 @@
         <activity android:name=".activities.TriviaGameActivity" />
         <activity android:name=".activities.TriviaGameResultsActivity" />
         <activity android:name=".settings.SettingsActivity" />
+        <activity android:name=".activities.ClassicModeActivity" />
+        <activity android:name=".activities.CustomModeActivity" />
     </application>
 
 </manifest>

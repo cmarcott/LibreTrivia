@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name" translatable="false">LibreTrivia</string>
     <string name="app_description">An open source trivia game.</string>
 
@@ -42,7 +42,7 @@
     <string name="ui_about">About</string>
     <string name="ui_play">Play</string>
     <string name="ui_start_game">Start Game</string>
-    <string name="ui_create_question">Create Question</string>
+    <string name="ui_create_question" tools:ignore="MissingTranslation">Create Question</string>
     <string name="ui_any">Any</string>
     <string name="ui_true">True</string>
     <string name="ui_false">False</string>
@@ -63,6 +63,9 @@
     <string name="ui_return_to_menu">Return To Menu</string>
     <string name="ui_create_correct_header">Input Correct Answer</string>
     <string name="ui_create_incorrect_header">Input incorrect Answers</string>
+    <string name="ui_classic_mode" tools:ignore="MissingTranslation">Classic Mode</string>
+    <string name="ui_custom_mode" tools:ignore="MissingTranslation">Custom Mode</string>
+    <string name="ui_high_score" tools:ignore="MissingTranslation">High Score</string>
 
     <!-- Error Strings -->
     <string name="error_network"><b>Networkin error!</b>\n Could not connect to a network.</string>

@@ -18,6 +18,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import io.github.trytonvanmeer.libretrivia.R;
+import io.github.trytonvanmeer.libretrivia.database.SQLiteDBHelper;
 import io.github.trytonvanmeer.libretrivia.settings.SettingsActivity;
 
 
@@ -27,6 +28,7 @@ public class BaseActivity extends AppCompatActivity {
 
 
     boolean isDarkMode;
+    public static SQLiteDBHelper myDb;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,6 +45,8 @@ public class BaseActivity extends AppCompatActivity {
         }else{
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         }
+
+        myDb = new SQLiteDBHelper(this);
 
     }
 
@@ -66,6 +70,9 @@ public class BaseActivity extends AppCompatActivity {
                 return true;
             case android.R.id.home: //bottom-right back button
                 onBackPressed();
+            case R.id.report:
+                onReport();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -90,6 +97,18 @@ public class BaseActivity extends AppCompatActivity {
                 .withAboutVersionShownName(true)
                 .withAboutDescription(appDescription)
                 .start(this);
+    }
+
+    private void onReport() {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("plain/text");
+
+        //set default fields for email
+        intent.putExtra(Intent.EXTRA_EMAIL, new String[] { "libretrivia@gmail.com" });
+        intent.putExtra(Intent.EXTRA_SUBJECT, "Report Bug/Question");
+        intent.putExtra(Intent.EXTRA_TEXT, "Enter details of error/bug - Edit this area");
+
+        startActivity(Intent.createChooser(intent, ""));
     }
 
     /**
