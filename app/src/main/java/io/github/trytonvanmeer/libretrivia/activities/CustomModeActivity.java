@@ -23,6 +23,14 @@ import io.github.trytonvanmeer.libretrivia.util.TypeUtil;
 
 //Custom Mode game setup screen
 public class CustomModeActivity extends BaseActivity {
+    @BindView(R.id.button_play)
+    Button buttonPlay;
+    @BindView(R.id.spinner_number)
+    Spinner spinnerNumber;
+    @BindView(R.id.spinner_category)
+    Spinner spinnerCategory;
+    @BindView(R.id.spinner_difficulty)
+    Spinner spinnerDifficulty;
     @BindView(R.id.button_create_question)
     Button buttonCreateQuestion;
 
@@ -39,6 +47,43 @@ public class CustomModeActivity extends BaseActivity {
             startActivity(intent);
         });
 
+        //handler for starting the game
+        buttonPlay.setOnClickListener(v -> {
+            //read from input fields
+            int amount = (int) spinnerNumber.getSelectedItem();
+            TriviaCategory category = (TriviaCategory) spinnerCategory.getSelectedItem();
+            TriviaDifficulty difficulty = (TriviaDifficulty) spinnerDifficulty.getSelectedItem();
 
+            //Create the query for the openTDB database
+            TriviaQuery query = new TriviaQuery.Builder(amount)
+                    .category(category)
+                    .difficulty(difficulty)
+                    .build();
+
+            //start the trivia game activity, passing it the query
+            Intent intent = new Intent(getApplicationContext(), TriviaGameActivity.class);
+            intent.putExtra(TriviaGameActivity.EXTRA_TRIVIA_QUERY, query);
+            startActivity(intent);
+        });
+
+
+        Integer[] numbers = new Integer[50];
+        for (int i = 0; i < 50; ) {
+            numbers[i] = ++i;
+        }
+        spinnerNumber.setAdapter(
+                new ArrayAdapter<>(
+                        this, android.R.layout.simple_list_item_1, numbers)
+        );
+        spinnerNumber.setSelection(9);
+
+        spinnerCategory.setAdapter(
+                new ArrayAdapter<>(
+                        this, android.R.layout.simple_list_item_1, TriviaCategory.values()));
+
+        spinnerDifficulty.setAdapter(
+                new ArrayAdapter<>(
+                        this, android.R.layout.simple_list_item_1, TriviaDifficulty.values()));
     }
 }
+
