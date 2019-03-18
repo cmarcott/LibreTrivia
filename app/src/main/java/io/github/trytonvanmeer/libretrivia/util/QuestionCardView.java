@@ -2,15 +2,21 @@ package io.github.trytonvanmeer.libretrivia.util;
 
 import androidx.recyclerview.widget.RecyclerView;
 import io.github.trytonvanmeer.libretrivia.R;
+import io.github.trytonvanmeer.libretrivia.activities.BaseActivity;
+import io.github.trytonvanmeer.libretrivia.activities.QuestionViewActivity;
 import io.github.trytonvanmeer.libretrivia.trivia.TriviaQuestion;
 import io.github.trytonvanmeer.libretrivia.trivia.TriviaQuestionBoolean;
 import io.github.trytonvanmeer.libretrivia.trivia.TriviaQuestionMultiple;
 
+import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -50,6 +56,24 @@ public class QuestionCardView extends RecyclerView.Adapter<QuestionCardView.Ques
         holder.multiple_card_cat.setText(question.getCategory().toString());
         holder.multiple_card_diff.setText(question.getDifficulty().toString());
 
+        holder.card_delete_button.setOnClickListener(v -> {
+
+            // When delete button is pressed, get question text.
+            String questionText = holder.multiple_card_question.getText().toString();
+
+            // Reverse lookup question text in DB to get ID.
+            String id = BaseActivity.myDb.getQuestionID(questionText);
+            BaseActivity.myDb.deleteCustomQuestions(id);
+
+
+            Log.d("Q_VIEW","DETECTED BUTTON PUSH.");
+
+            // Remove the item from the list.
+            int pos = holder.getAdapterPosition();
+            removeAt(pos);
+
+        });
+
         // Build card based on type of question.
         if(question instanceof TriviaQuestionMultiple){
 
@@ -86,8 +110,11 @@ public class QuestionCardView extends RecyclerView.Adapter<QuestionCardView.Ques
                 multiple_card_option_3,
                 multiple_card_option_4;
 
+        Button card_delete_button;
         public QuestionCardViewHolder(View itemView) {
             super(itemView);
+
+
 
             multiple_card_question = itemView.findViewById(R.id.multiple_card_question);
             multiple_card_cat = itemView.findViewById(R.id.multiple_card_cat);
@@ -97,7 +124,14 @@ public class QuestionCardView extends RecyclerView.Adapter<QuestionCardView.Ques
             multiple_card_option_2 = itemView.findViewById(R.id.multiple_card_option_2);
             multiple_card_option_3 = itemView.findViewById(R.id.multiple_card_option_3);
             multiple_card_option_4 = itemView.findViewById(R.id.multiple_card_option_4);
+            card_delete_button = itemView.findViewById(R.id.card_delete_button);
 
         }
+    }
+
+    public void removeAt(int position) {
+        questionList.remove(position);
+        notifyItemRemoved(position);
+        notifyItemRangeChanged(position, questionList.size());
     }
 }

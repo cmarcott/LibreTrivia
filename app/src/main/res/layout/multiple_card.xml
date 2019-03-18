@@ -107,6 +107,20 @@
                 android:text="Question option 4"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
 
+            <Button
+                android:id="@+id/card_delete_button"
+                android:textColor="@color/colorText"
+                android:layout_width="100dp"
+                android:layout_height="20dp"
+                android:layout_below="@id/multiple_card_option_4"
+                android:layout_marginTop="10dp"
+                android:background="@color/colorPrimaryDark"
+                android:textStyle="bold"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small.Inverse"
+                android:layout_marginLeft="5dp"
+                android:text="DELETE"
+                android:textSize="10sp" />
+
         </RelativeLayout>
 
     </androidx.cardview.widget.CardView>

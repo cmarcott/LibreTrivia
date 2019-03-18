@@ -151,6 +151,27 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         return res;
     }
 
+    public String getQuestionID(String question){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String id = "";
+        Cursor res;
+
+        res = db.rawQuery("SELECT * from "
+                + QUES_TABLE_NAME + " WHERE "
+                + QUES_COLUMN_QUESTION
+                + " = " + "\"" + question + "\"", null);
+
+        while(res.moveToNext()){
+
+            int index = res.getColumnIndexOrThrow("_id");
+            id = res.getString(index);
+
+        }
+
+        return id;
+
+    }
+
     /* updateCustomQuestion
      * @depracated
      * Update a particular custom question based on id value

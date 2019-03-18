@@ -15,7 +15,7 @@ public enum TriviaDifficulty {
     HARD("hard", R.string.difficulty_hard);
 
     // Name of difficulty used in queries
-    private final String name;
+    public final String name;
     // Display name of the difficulty
     private final int displayName;
 
