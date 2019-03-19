@@ -68,6 +68,8 @@ public class TriviaGameActivity extends BaseActivity
             //get the query passed from MainActivity
             TriviaQuery query = (TriviaQuery) bundle.get(EXTRA_TRIVIA_QUERY);
 
+            this.game = new TriviaGame(query.getCategory(), query.getDifficulty());
+
             progressBar.setVisibility(View.VISIBLE);
 
             //Get the trivia questions in asynchronous task
@@ -114,7 +116,7 @@ public class TriviaGameActivity extends BaseActivity
         } else {
             try {
                 //set up game from the questions returned
-                this.game = new TriviaGame(ApiUtil.jsonToQuestionArray(json));
+                this.game.setQuestions(ApiUtil.jsonToQuestionArray(json));
             } catch (NoTriviaResultsException e) {
                 //opens an error page
                 onNoTriviaResults();

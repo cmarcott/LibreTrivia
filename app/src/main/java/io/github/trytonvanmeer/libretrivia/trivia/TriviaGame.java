@@ -6,13 +6,28 @@ import java.util.List;
 //holds questions, results, state of a trivia game
 public class TriviaGame implements Serializable {
     private int currentQuestion;
-    private final boolean[] results;
-    private final List<TriviaQuestion> questions;
+    private boolean[] results;
+    private List<TriviaQuestion> questions;
+    private TriviaCategory category;
+    private TriviaDifficulty difficulty;
 
-    public TriviaGame(List<TriviaQuestion> questions) {
+    public TriviaGame(TriviaCategory category, TriviaDifficulty difficulty) {
         this.currentQuestion = 0;
+        this.category = category;
+        this.difficulty = difficulty;
+    }
+
+    public void setQuestions(List<TriviaQuestion> questions) {
         this.questions = questions;
         this.results = new boolean[questions.size()];
+    }
+
+    public TriviaCategory getCategory(){
+        return this.category;
+    }
+
+    public TriviaDifficulty getDifficulty(){
+        return this.difficulty;
     }
 
     public TriviaQuestion getCurrentQuestion() {

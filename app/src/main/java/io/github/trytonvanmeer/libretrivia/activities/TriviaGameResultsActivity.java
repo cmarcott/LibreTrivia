@@ -1,8 +1,12 @@
 package io.github.trytonvanmeer.libretrivia.activities;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
+
+import android.database.Cursor;
+import io.github.trytonvanmeer.libretrivia.database.SQLiteDBHelper;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -46,6 +50,11 @@ public class TriviaGameResultsActivity extends BaseActivity {
         }
 
         float highScore = 0;//get from DB
+        SQLiteDBHelper dbHelper = new SQLiteDBHelper(getApplicationContext());
+        Cursor scoreCursor = dbHelper.getTopHighScore();
+        //highScore = scoreCursor.getFloat(0);
+        scoreCursor.close();
+
         float currentScore = ((float) correctTotal) / game.getQuestionsCount() * 100;
 
         //display
@@ -62,7 +71,7 @@ public class TriviaGameResultsActivity extends BaseActivity {
         }
 
         //try to send high score to DB
-        
+        dbHelper.insertHighScore(currentScore, game.getCategory().toString(), game.getDifficulty().toString(),game.getQuestionsCount());
         
         
 

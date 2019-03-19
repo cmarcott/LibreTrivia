@@ -70,8 +70,8 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("CREATE TABLE " + HS_TABLE_NAME + " (" +
                 HS_COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 HS_COLUMN_CATEGORY + " TEXT, " +
-                HS_COLUMN_DIFFICULTY + " INT, " +
-                HS_COLUMN_SCORE + " TEXT, " +
+                HS_COLUMN_DIFFICULTY + " TEXT, " +
+                HS_COLUMN_SCORE + " FLOAT, " +
                 HS_COLUMN_QUIZ_LENGTH + " TEXT " +
                 " )");
     }
@@ -226,7 +226,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
      *
      * @author dnoel
      */
-    public boolean insertHighScore(float score, String category, int difficulty, int quizLength) {
+    public boolean insertHighScore(float score, String category, String difficulty, int quizLength) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         long result;
@@ -235,7 +235,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         contentValues.put(HS_COLUMN_CATEGORY, category);
         contentValues.put(HS_COLUMN_DIFFICULTY, difficulty);
         contentValues.put(HS_COLUMN_QUIZ_LENGTH, quizLength);
-        result = db.insert(QUES_TABLE_NAME, null, contentValues);
+        result = db.insert(HS_TABLE_NAME, null, contentValues);
 
 
         if (result == TypeUtil.RETURN_ERROR) {
@@ -270,7 +270,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
 
     /*
      * Returns The best score in the High Scores Table
-     * @return Cursor res - Cursor containing all high scoers
+     * @return Cursor res - Cursor containing all high scores
      *
      * @author dnoel
      */

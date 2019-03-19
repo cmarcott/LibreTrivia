@@ -59,6 +59,14 @@ public class TriviaQuery implements Serializable {
         }
     }
 
+    public TriviaCategory getCategory(){
+        return this.category;
+    }
+
+    public TriviaDifficulty getDifficulty(){
+        return this.difficulty;
+    }
+
     //turns the query object into a url
     @Override
     public String toString() {
