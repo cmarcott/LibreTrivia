@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:orientation="vertical"
+tools:context="io.github.trytonvanmeer.libretrivia.activities.CustomModeActivity">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -18,28 +21,76 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
+            <!-- Select Amount -->
+            <TextView
+                style="@style/TextLabel"
+                android:labelFor="@id/spinner_number"
+                android:text="@string/ui_amount" />
+
+            <Spinner
+                android:id="@+id/spinner_number"
+                style="@style/Spinner" />
+
+            <!-- Select Category Spinner -->
+            <TextView
+                style="@style/TextLabel"
+                android:labelFor="@id/spinner_category"
+                android:text="@string/ui_category" />
+
+            <Spinner
+                android:id="@+id/spinner_category"
+                style="@style/Spinner" />
+
+            <!-- Select Difficulty Spinner -->
+            <TextView
+                style="@style/TextLabel"
+                android:labelFor="@id/spinner_difficulty"
+                android:text="@string/ui_difficulty" />
+
+            <Spinner
+                android:id="@+id/spinner_difficulty"
+                style="@style/Spinner" />
+
+            <!-- Play Button -->
+            <Button
+                android:id="@+id/button_play"
+                style="@style/Button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/btn_rounded"
+                android:text="@string/ui_start_game"
+                android:textSize="24sp" />
+
             <Button
                 android:id="@+id/button_create_question"
                 style="@style/Button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="Create Question"
-                android:textSize="24sp"  />
+                android:layout_marginTop="20dp"
+                android:background="@drawable/btn_rounded"
+                android:text="@string/ui_create_question"
+                android:textSize="24sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                />
 
             <Button
                 android:id="@+id/button_view_question"
                 style="@style/Button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="View Questions"
-                android:textSize="24sp"  />
+                android:layout_marginTop="20dp"
+                android:background="@drawable/btn_rounded"
+                android:text="@string/ui_view_questions"
+                android:textSize="24sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                />
 
         </LinearLayout>
     </ScrollView>
-
-
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>
+

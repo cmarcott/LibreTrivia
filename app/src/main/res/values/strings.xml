@@ -43,6 +43,7 @@
     <string name="ui_play">Play</string>
     <string name="ui_start_game">Start Game</string>
     <string name="ui_create_question" tools:ignore="MissingTranslation">Create Question</string>
+    <string name="ui_view_questions" tools:ignore="MissingTranslation">View Custom Questions</string>
     <string name="ui_any">Any</string>
     <string name="ui_true">True</string>
     <string name="ui_false">False</string>
