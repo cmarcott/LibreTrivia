@@ -21,74 +21,28 @@ import io.github.trytonvanmeer.libretrivia.trivia.TriviaDifficulty;
 import io.github.trytonvanmeer.libretrivia.trivia.TriviaQuery;
 import io.github.trytonvanmeer.libretrivia.util.TypeUtil;
 
-//The setup screen for the game ("Classic mode" setup)
+//The landing screen to choose game modes
 public class MainActivity extends BaseActivity {
-    @BindView(R.id.button_play)
-    Button buttonPlay;
-    @BindView(R.id.button_create)
-    Button buttonCreate;
-    @BindView(R.id.spinner_number)
-    Spinner spinnerNumber;
-    @BindView(R.id.spinner_category)
-    Spinner spinnerCategory;
-    @BindView(R.id.spinner_difficulty)
-    Spinner spinnerDifficulty;
+    @BindView(R.id.button_classic_mode)
+    Button buttonClassicMode;
+    @BindView(R.id.button_custom_mode)
+    Button buttonCustomMode;
 
-     //initialization
-    //SQLiteDBHelper myDb;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        //myDb = new SQLiteDBHelper(this);
-        //myDb.deleteAllCustomQuestions();
 
-        //handler for starting the game
-        buttonPlay.setOnClickListener(v -> {
-            //read from input fields
-            int amount = (int) spinnerNumber.getSelectedItem();
-            TriviaCategory category = (TriviaCategory) spinnerCategory.getSelectedItem();
-            TriviaDifficulty difficulty = (TriviaDifficulty) spinnerDifficulty.getSelectedItem();
-
-            //Create the query for the openTDB database
-            TriviaQuery query = new TriviaQuery.Builder(amount)
-                    .category(category)
-                    .difficulty(difficulty)
-                    .build();
-
-            //start the trivia game activity, passing it the query
-            Intent intent = new Intent(getApplicationContext(), TriviaGameActivity.class);
-            intent.putExtra(TriviaGameActivity.EXTRA_TRIVIA_QUERY, query);
+        buttonClassicMode.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), ClassicModeActivity.class);
             startActivity(intent);
         });
 
-
-        //set up input fields
-        buttonCreate.setOnClickListener(v -> {
-            Log.d("CREATE QUESTION","Switching to create question.");
-            Intent intent = new Intent(getApplicationContext(), QuestionCreateActivity.class);
+        buttonCustomMode.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), CustomModeActivity.class);
             startActivity(intent);
         });
 
-
-
-        Integer[] numbers = new Integer[50];
-        for (int i = 0; i < 50; ) {
-            numbers[i] = ++i;
-        }
-        spinnerNumber.setAdapter(
-                new ArrayAdapter<>(
-                        this, android.R.layout.simple_list_item_1, numbers)
-        );
-        spinnerNumber.setSelection(9);
-
-        spinnerCategory.setAdapter(
-                new ArrayAdapter<>(
-                        this, android.R.layout.simple_list_item_1, TriviaCategory.values()));
-
-        spinnerDifficulty.setAdapter(
-                new ArrayAdapter<>(
-                        this, android.R.layout.simple_list_item_1, TriviaDifficulty.values()));
     }
 }

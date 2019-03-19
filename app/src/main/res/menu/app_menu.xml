@@ -9,4 +9,8 @@
         android:id="@+id/about"
         android:title="@string/ui_about"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/report"
+        android:title="Report Bug/Question"
+        app:showAsAction="never" />
 </menu>
