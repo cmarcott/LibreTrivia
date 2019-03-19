@@ -60,6 +60,8 @@
     <string name="ui_results_correct">Correct Answers</string>
     <string name="ui_results_wrong">Wrong Answers</string>
     <string name="ui_results_total">Total Questions</string>
+    <string name="ui_high_score">High Score</string>
+    <string name="ui_new_high_score">**NEW HIGH SCORE**</string>
     <string name="ui_return_to_menu">Return To Menu</string>
     <string name="ui_create_correct_header">Input Correct Answer</string>
     <string name="ui_create_incorrect_header">Input incorrect Answers</string>

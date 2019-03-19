@@ -66,6 +66,34 @@
             android:id="@+id/text_results_wrong"
             style="@style/ResultText"
             tools:text="4" />
+    </LinearLayout>
+    <!--High Score-->
+    <!-- Wrong Answers-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp">
+
+        <TextView
+            style="@style/ResultText"
+            android:text="@string/ui_high_score"
+            android:textColor="@color/colorAccent" />
+
+        <TextView
+            android:id="@+id/text_high_score"
+            style="@style/ResultText"
+            tools:text="0%" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp">
+
+        <TextView
+            android:id="@+id/text_new_high_score"
+            style="@style/ResultText"
+            android:text="@string/ui_new_high_score"
+            android:textColor="@color/colorAccent" />
 
     </LinearLayout>
 

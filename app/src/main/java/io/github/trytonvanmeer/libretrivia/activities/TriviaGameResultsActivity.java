@@ -19,6 +19,10 @@ public class TriviaGameResultsActivity extends BaseActivity {
     TextView textResultsWrong;
     @BindView(R.id.text_results_total)
     TextView textResultsTotal;
+    @BindView(R.id.text_high_score)
+    TextView textHighScore;
+    @BindView(R.id.text_new_high_score)
+    TextView textNewHighScore;
     @BindView(R.id.button_return_to_menu)
     Button buttonReturnToMenu;
 
@@ -41,10 +45,26 @@ public class TriviaGameResultsActivity extends BaseActivity {
             }
         }
 
+        float highScore = 0;//get from DB
+        float currentScore = ((float) correctTotal) / game.getQuestionsCount() * 100;
+
         //display
         textResultsCorrect.setText(String.valueOf(correctTotal));
         textResultsWrong.setText(String.valueOf(game.getQuestionsCount() - correctTotal));
         textResultsTotal.setText(String.valueOf(game.getQuestionsCount()));
+
+
+        if (currentScore > highScore) {
+            textHighScore.setText(currentScore + "%");
+        } else {
+            textHighScore.setText(highScore + "%");
+            textNewHighScore.setText("");
+        }
+
+        //try to send high score to DB
+        
+        
+        
 
         //Listener for return button
         buttonReturnToMenu.setOnClickListener(v -> finish());
