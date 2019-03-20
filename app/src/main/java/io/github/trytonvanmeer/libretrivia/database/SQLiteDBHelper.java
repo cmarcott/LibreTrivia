@@ -279,7 +279,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
 
     /*
      * Returns series of strings corresponding to all rows in High Scores Table
-     * @return Cursor res - Cursor containing all high scoers
+     * @return Cursor res - Cursor containing all high scores
      *
      * @author dnoel
      */

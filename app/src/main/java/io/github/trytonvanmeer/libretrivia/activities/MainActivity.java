@@ -27,6 +27,8 @@ public class MainActivity extends BaseActivity {
     Button buttonClassicMode;
     @BindView(R.id.button_custom_mode)
     Button buttonCustomMode;
+    @BindView (R.id.button_high_score)
+    Button buttonHighScores;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,5 +46,9 @@ public class MainActivity extends BaseActivity {
             startActivity(intent);
         });
 
+        buttonHighScores.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), HighScoresActivity.class);
+            startActivity(intent);
+        });
     }
 }

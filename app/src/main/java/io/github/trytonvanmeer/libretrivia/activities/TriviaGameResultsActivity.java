@@ -49,10 +49,10 @@ public class TriviaGameResultsActivity extends BaseActivity {
             }
         }
 
-        float highScore = 0;//get from DB
-        SQLiteDBHelper dbHelper = new SQLiteDBHelper(getApplicationContext());
-        Cursor scoreCursor = dbHelper.getTopHighScore();
-        //highScore = scoreCursor.getFloat(0);
+        float highScore;//get from DB
+        Cursor scoreCursor = BaseActivity.myDb.getTopHighScore();
+        scoreCursor.moveToFirst();
+        highScore = scoreCursor.getFloat(0);
         scoreCursor.close();
 
         float currentScore = ((float) correctTotal) / game.getQuestionsCount() * 100;
@@ -64,14 +64,14 @@ public class TriviaGameResultsActivity extends BaseActivity {
 
 
         if (currentScore > highScore) {
-            textHighScore.setText(currentScore + "%");
+            textHighScore.setText(String.format("%.2f%%", currentScore));
         } else {
-            textHighScore.setText(highScore + "%");
+            textHighScore.setText(String.format("%.2f%%", highScore));
             textNewHighScore.setText("");
         }
 
         //try to send high score to DB
-        dbHelper.insertHighScore(currentScore, game.getCategory().toString(), game.getDifficulty().toString(),game.getQuestionsCount());
+        BaseActivity.myDb.insertHighScore(currentScore, game.getCategory().toString(), game.getDifficulty().toString(),game.getQuestionsCount());
         
         
 
