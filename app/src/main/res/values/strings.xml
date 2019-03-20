@@ -67,6 +67,7 @@
     <string name="ui_classic_mode" tools:ignore="MissingTranslation">Classic Mode</string>
     <string name="ui_custom_mode" tools:ignore="MissingTranslation">Custom Mode</string>
     <string name="ui_high_score" tools:ignore="MissingTranslation">High Score</string>
+    <string name="ui_share" tools:ignore="MissingTranslation">Share</string>
 
     <!-- Error Strings -->
     <string name="error_network"><b>Networkin error!</b>\n Could not connect to a network.</string>
