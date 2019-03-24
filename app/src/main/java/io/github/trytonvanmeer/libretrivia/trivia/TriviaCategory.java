@@ -65,7 +65,7 @@ public enum TriviaCategory {
     // see <https://opentdb.com/api_category.php>
     private final int ID;
     // The name of the category in the JSON response
-    private final String name;
+    public final String name;
     // The display name of the category
     private final int displayName;
 

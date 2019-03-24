@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="400dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp">
+
+            <TextView
+                android:id="@+id/multiple_card_question"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:text="The multiple choice question being asked?"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"/>
+
+            <TextView
+                android:id="@+id/multiple_card_cat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/multiple_card_question"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/about_libraries_accent"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:text="Category"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small.Inverse"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/multiple_card_diff"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/multiple_card_question"
+                android:layout_toRightOf="@id/multiple_card_cat"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/about_libraries_accent"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:text="Difficulty"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small.Inverse"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/multiple_card_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/multiple_card_question"
+                android:layout_toRightOf="@id/multiple_card_diff"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/about_libraries_accent"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:text="Type"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small.Inverse"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/multiple_card_option_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/multiple_card_cat"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="5dp"
+                android:text="Question option 1"
+                android:textColor="@color/colorAccentGreen"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
+
+            <TextView
+                android:id="@+id/multiple_card_option_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/multiple_card_option_1"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="5dp"
+                android:text="Question option 2"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
+
+            <TextView
+                android:id="@+id/multiple_card_option_3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/multiple_card_option_2"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="5dp"
+                android:text="Question option 3"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
+
+            <TextView
+                android:id="@+id/multiple_card_option_4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/multiple_card_option_3"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="5dp"
+                android:text="Question option 4"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
+
+            <Button
+                android:id="@+id/card_delete_button"
+                android:textColor="@color/colorText"
+                android:layout_width="100dp"
+                android:layout_height="20dp"
+                android:layout_below="@id/multiple_card_option_4"
+                android:layout_marginTop="10dp"
+                android:background="@color/colorPrimaryDark"
+                android:textStyle="bold"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small.Inverse"
+                android:layout_marginLeft="5dp"
+                android:text="DELETE"
+                android:textSize="10sp" />
+
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</LinearLayout>
