@@ -6,6 +6,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -124,30 +125,45 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
      * @param int difficulty - the difficulty of question to be matched, can be null
      * @return Cursor res - Cursor containing all custom questions
      */
-    public Cursor getSpecificCustomQuestions(String category, Integer difficulty) {
+    public Cursor getSpecificCustomQuestions(String category, Integer difficulty, Boolean randomize) {
         SQLiteDatabase db = this.getWritableDatabase();
+        String rawQuery = null;
         Cursor res;
+
+        // If both null just get all questions in database, equivalent to getAllCustomQuestions
+        if (difficulty == null && category == null) {
+            rawQuery = "SELECT * from " + QUES_TABLE_NAME;
         // If difficulty sent as null, pick any difficulty
-        if (difficulty == null) {
-            res = db.rawQuery("SELECT * from "
+        } else if (difficulty == null) {
+            rawQuery = "SELECT * from "
                     + QUES_TABLE_NAME + " WHERE "
                     + QUES_COLUMN_CATEGORY
-                    + " = " + category, null);
+                    + " = '" + category + "'";
+            Log.d("SQLiteDBHelper", "Option 1: " + rawQuery);
+
         // If category sent as null, pick any category
         } else if (category == null) {
-            res = db.rawQuery("SELECT * from "
+            rawQuery = "SELECT * from "
                     + QUES_TABLE_NAME + " WHERE "
                     + QUES_COLUMN_DIFFICULTY
-                    + " = " + difficulty, null);
+                    + " = " + difficulty;
+            Log.d("SQLiteDBHelper", "Option 2: " + rawQuery);
         // otherwise use both parameters
         } else {
-            res = db.rawQuery("SELECT * from "
+            rawQuery = "SELECT * from "
                     + QUES_TABLE_NAME + " WHERE "
                     + QUES_COLUMN_CATEGORY
-                    + " = " + category + " AND "
+                    + " = '" + category + "'" + " AND "
                     + QUES_COLUMN_DIFFICULTY
-                    + " = " + difficulty, null);
+                    + " = " + difficulty;
+
+            Log.d("SQLiteDBHelper", "Option 3: " + rawQuery);
         }
+
+        // Randomize quetions so quizzes arent all the same
+        if (randomize) { rawQuery = rawQuery + " ORDER BY random()";}
+
+        res = db.rawQuery(rawQuery, null);
         return res;
     }
 

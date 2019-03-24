@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -67,7 +68,7 @@ public class TriviaGameActivity extends BaseActivity
             assert bundle != null;
             //get the query passed from MainActivity
             TriviaQuery query = (TriviaQuery) bundle.get(EXTRA_TRIVIA_QUERY);
-
+            
             progressBar.setVisibility(View.VISIBLE);
 
             //Get the trivia questions in asynchronous task
@@ -247,7 +248,11 @@ public class TriviaGameActivity extends BaseActivity
         protected String doInBackground(TriviaQuery... query) {
             String json;
             try {
-                json = ApiUtil.GET(query[0]);
+                if (BaseActivity.isCustomGame) {
+                    json = ApiUtil.LocalGET(query[0]);
+                } else {
+                    json = ApiUtil.GET(query[0]);
+                }
             } catch (IOException e) {
                 return null;
             }
