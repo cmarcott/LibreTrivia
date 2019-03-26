@@ -19,7 +19,7 @@ public class HighScoresActivity extends BaseActivity {
 
 
     private RecyclerView recyclerView;
-    private List<HighScore> hsList;//TODO create class
+    private List<HighScore> hsList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +57,7 @@ public class HighScoresActivity extends BaseActivity {
             String cat = c.getString(index);
             index = c.getColumnIndexOrThrow("difficulty");
             String dif = c.getString(index);
-            index = c.getColumnIndexOrThrow("quizLength");
+            index = c.getColumnIndexOrThrow("quiz_length");
             int length = c.getInt(index);
 
             Log.d("Q_VIEW", "READING QUESTION FROM DB\n" + score + "\n" +

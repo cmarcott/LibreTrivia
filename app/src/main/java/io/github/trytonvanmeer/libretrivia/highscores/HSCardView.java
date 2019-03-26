@@ -38,7 +38,7 @@ public class HSCardView extends RecyclerView.Adapter<HSCardView.HSCardViewHolder
     public HSCardViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         //inflating and returning our view holder
         LayoutInflater inflater = LayoutInflater.from(mCtx);
-        View view = inflater.inflate(R.layout.multiple_card, null);
+        View view = inflater.inflate(R.layout.hs_card, null);
         return new HSCardViewHolder(view);
     }
 
@@ -51,9 +51,9 @@ public class HSCardView extends RecyclerView.Adapter<HSCardView.HSCardViewHolder
 
         // Build the card
         holder.hs_card_score.setText(String.format("%.2f%%", hs.getScore()));
-        holder.hs_card_cat.setText(hs.getCategory());
-        holder.hs_card_diff.setText(hs.getDifficulty());
-        holder.hs_card_quiz_length.setText(hs.getQuizLength());
+        holder.hs_card_cat.setText("Category: " + hs.getCategory());
+        holder.hs_card_diff.setText("Difficulty: " + hs.getDifficulty());
+        holder.hs_card_quiz_length.setText("on " + String.valueOf(hs.getQuizLength()) + " questions.");
     }
 
     @Override
@@ -71,10 +71,10 @@ public class HSCardView extends RecyclerView.Adapter<HSCardView.HSCardViewHolder
         public HSCardViewHolder(View itemView) {
             super(itemView);
 
-            hs_card_score = itemView.findViewById(R.id.multiple_card_question);
-            hs_card_cat = itemView.findViewById(R.id.multiple_card_cat);
-            hs_card_diff = itemView.findViewById(R.id.multiple_card_diff);
-            hs_card_quiz_length = itemView.findViewById(R.id.multiple_card_option_4);
+            hs_card_score = itemView.findViewById(R.id.hs_card_score);
+            hs_card_cat = itemView.findViewById(R.id.hs_card_cat);
+            hs_card_diff = itemView.findViewById(R.id.hs_card_diff);
+            hs_card_quiz_length = itemView.findViewById(R.id.hs_card_length);
         }
     }
 }
