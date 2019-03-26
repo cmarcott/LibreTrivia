@@ -29,6 +29,9 @@ public class MainActivity extends BaseActivity {
     Button buttonCustomMode;
     @BindView (R.id.button_high_score)
     Button buttonHighScores;
+    @BindView (R.id.button_share)
+    Button buttonShare;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +51,10 @@ public class MainActivity extends BaseActivity {
 
         buttonHighScores.setOnClickListener(v -> {
             Intent intent = new Intent(getApplicationContext(), HighScoresActivity.class);
+            startActivity(intent);
+        });
+        buttonShare.setOnClickListener(v -> {
+            Intent intent = new Intent (getApplicationContext(), ShareActivity.class);
             startActivity(intent);
         });
     }

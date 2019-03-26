@@ -28,6 +28,7 @@ public class BaseActivity extends AppCompatActivity {
 
 
     boolean isDarkMode;
+    public static Boolean isCustomGame;
     public static SQLiteDBHelper myDb;
 
     @Override

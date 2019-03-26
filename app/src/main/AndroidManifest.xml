@@ -27,6 +27,8 @@
         <activity android:name=".activities.ClassicModeActivity" />
         <activity android:name=".activities.CustomModeActivity" />
         <activity android:name=".activities.HighScoresActivity" />
+        <activity android:name=".activities.ShareActivity" />
+
     </application>
 
 </manifest>

@@ -7,7 +7,7 @@ public class TriviaQuery implements Serializable {
     private static final String BASE = "https://opentdb.com/api.php?";
     private static final int DEFAULT_AMOUNT = 10;
 
-    private final int amount;
+    private final Integer amount;
     private final TriviaCategory category;
     private final TriviaDifficulty difficulty;
     private final TriviaType type;
@@ -87,4 +87,17 @@ public class TriviaQuery implements Serializable {
 
         return url.toString();
     }
+
+    public String getAmount() {
+        return this.amount.toString();
+    }
+
+    public String getCategoryString() {
+        return this.category.toString();
+    }
+
+    public String getDifficultyString() {
+        return this.difficulty.toString();
+    }
+
 }

@@ -41,6 +41,7 @@ public class CustomModeActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_custom_mode);
         ButterKnife.bind(this);
+        isCustomGame = true;
 
         // Set up input fields.
         buttonCreateQuestion.setOnClickListener(v -> {

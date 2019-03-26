@@ -14,15 +14,14 @@
         style="@style/Button"
         android:layout_width="185dp"
         android:layout_height="70dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="481dp"
-        android:layout_marginEnd="39dp"
-        android:layout_marginBottom="38dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="80dp"
+        android:layout_marginEnd="248dp"
         android:background="@drawable/btn_rounded"
         android:text="@string/ui_classic_mode"
         android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/button_high_score"
-        app:layout_constraintEnd_toStartOf="@+id/button_custom_mode"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -32,14 +31,14 @@
         style="@style/Button"
         android:layout_width="185dp"
         android:layout_height="70dp"
-        android:layout_marginTop="481dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="38dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="80dp"
+        android:layout_marginEnd="28dp"
         android:background="@drawable/btn_rounded"
         android:text="@string/ui_custom_mode"
         android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/button_share"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/button_classic_mode"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -49,16 +48,16 @@
         style="@style/Button"
         android:layout_width="185dp"
         android:layout_height="70dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="39dp"
-        android:layout_marginBottom="72dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="248dp"
+        android:layout_marginBottom="80dp"
         android:background="@drawable/btn_rounded"
         android:text="@string/ui_high_score"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/button_share"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_classic_mode" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <!-- Share Button -->
     <Button
@@ -66,31 +65,33 @@
         style="@style/Button"
         android:layout_width="185dp"
         android:layout_height="70dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="72dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="28dp"
+        android:layout_marginBottom="80dp"
         android:background="@drawable/btn_rounded"
         android:text="@string/ui_share"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/button_high_score"
-        app:layout_constraintTop_toBottomOf="@+id/button_custom_mode" />
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/button_high_score" />
 
     <!-- Loco Icon -->
     <ImageView
         android:id="@+id/icon_logo"
         android:layout_width="171dp"
         android:layout_height="166dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="45dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:contentDescription="logo icon"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.016"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.171"
+        app:layout_constraintVertical_bias="0.497"
         app:srcCompat="@mipmap/ic_launcher_round" />
 
 
