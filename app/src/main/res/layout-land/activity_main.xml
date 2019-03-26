@@ -61,7 +61,7 @@
 
     <!-- Share Button -->
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/button_share"
         style="@style/Button"
         android:layout_width="185dp"
         android:layout_height="70dp"

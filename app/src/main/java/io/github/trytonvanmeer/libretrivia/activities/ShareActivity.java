@@ -21,35 +21,10 @@ import io.github.trytonvanmeer.libretrivia.trivia.TriviaDifficulty;
 import io.github.trytonvanmeer.libretrivia.trivia.TriviaQuery;
 import io.github.trytonvanmeer.libretrivia.util.TypeUtil;
 
-//The landing screen to choose game modes
-public class MainActivity extends BaseActivity {
-    @BindView(R.id.button_classic_mode)
-    Button buttonClassicMode;
-    @BindView(R.id.button_custom_mode)
-    Button buttonCustomMode;
-    @BindView (R.id.button_share)
-    Button buttonShare;
-
+public class ShareActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
-
-        buttonClassicMode.setOnClickListener(v -> {
-            Intent intent = new Intent(getApplicationContext(), ClassicModeActivity.class);
-            startActivity(intent);
-        });
-
-        buttonCustomMode.setOnClickListener(v -> {
-            Intent intent = new Intent(getApplicationContext(), CustomModeActivity.class);
-            startActivity(intent);
-        });
-
-        buttonShare.setOnClickListener(v -> {
-            Intent intent = new Intent (getApplicationContext(), ShareActivity.class);
-            startActivity(intent);
-        });
-
+        setContentView(R.layout.activity_share);
     }
 }
