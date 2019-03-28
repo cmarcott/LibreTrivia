@@ -301,13 +301,13 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
      */
     public Cursor getAllHighScores() {
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor res = db.rawQuery("SELECT * from " + HS_TABLE_NAME, null);
+        Cursor res = db.rawQuery("SELECT * from " + HS_TABLE_NAME + " ORDER BY " + HS_COLUMN_SCORE + " DESC", null);
         return res;
     }
 
     /*
      * Returns The best score in the High Scores Table
-     * @return Cursor res - Cursor containing all high scores
+     * @return Cursor res - Cursor containing top score
      *
      * @author dnoel
      */

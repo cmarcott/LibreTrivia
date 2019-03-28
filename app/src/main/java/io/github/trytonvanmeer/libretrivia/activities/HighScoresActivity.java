@@ -2,19 +2,24 @@ package io.github.trytonvanmeer.libretrivia.activities;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.github.trytonvanmeer.libretrivia.R;
 import io.github.trytonvanmeer.libretrivia.highscores.HSCardView;
 import io.github.trytonvanmeer.libretrivia.highscores.HighScore;
 
+import android.app.AlertDialog;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class HighScoresActivity extends BaseActivity {
+    @BindView(R.id.button_clear_scores)
+    Button buttonClear;
 
 
 
@@ -26,6 +31,19 @@ public class HighScoresActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hs_view);
         ButterKnife.bind(this);
+
+        buttonClear.setOnClickListener(v -> {
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.ui_quit_game)
+                    .setMessage(R.string.ui_quit_game_msg)
+                    .setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                        BaseActivity.myDb.clearHighScores();
+                        this.onCreate(savedInstanceState);
+                    })
+                    .setNegativeButton(android.R.string.no, (dialog, which) -> {
+                    })
+                    .show();
+        });
 
         listAll();
 

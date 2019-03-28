@@ -8,8 +8,11 @@
     android:layout_height="match_parent"
     tools:context="io.github.trytonvanmeer.libretrivia.activities.MainActivity">
 
+
+
     <ScrollView android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:id="@+id/scores_scroll"
+        android:layout_height="520dp"
         android:fillViewport="true"
         xmlns:android="http://schemas.android.com/apk/res/android">
 
@@ -19,6 +22,33 @@
             android:layout_height="match_parent" />
 
     </ScrollView>
+
+
+    <View
+        android:id="@+id/hor_line_hs"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/scores_scroll"
+        android:background="@android:color/darker_gray"/>
+
+    <Space
+        android:id="@+id/hs_whitespace"
+        android:layout_below="@id/hor_line_hs"
+        android:layout_width="1dp"
+        android:layout_height="20dp"/>
+
+    <!--Clear scores button-->
+    <Button
+        android:id="@+id/button_clear_scores"
+        style="@style/Button"
+        android:layout_below="@id/hs_whitespace"
+        android:layout_height="50dp"
+        android:layout_width="150dp"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/btn_rounded"
+        android:text="@string/ui_clear_high_scores"
+        android:textSize="24sp"
+        />
 
 </RelativeLayout>
 
