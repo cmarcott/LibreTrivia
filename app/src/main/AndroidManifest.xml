@@ -3,6 +3,9 @@
     package="io.github.trytonvanmeer.libretrivia">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:name=".LibreTriviaApplication"
@@ -28,6 +31,7 @@
         <activity android:name=".activities.CustomModeActivity" />
         <activity android:name=".activities.HighScoresActivity" />
         <activity android:name=".activities.ShareActivity" />
+        <activity android:name=".activities.DeviceListActivity" />
 
     </application>
 

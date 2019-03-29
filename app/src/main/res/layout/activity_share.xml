@@ -9,28 +9,24 @@
 
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/button_search_for_device"
+        style="@style/Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="284dp"
-        android:text="Search for Device"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="346dp"
-        android:layout_height="173dp"
-        android:layout_marginStart="32dp"
         android:layout_marginTop="16dp"
-        android:layout_marginBottom="8dp"
-        android:text="The following allows you to send your custom questions to another user via Bluetooth. Make sure both devices have Bluetooth enabled. If you wish to begin, click the 'SEARCH FOR DEVICE' button below"
-        android:textSize="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/button"
+        android:text="Search for Device"
+        app:layout_constraintStart_toEndOf="@+id/button_enable_discoverable"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/button_enable_discoverable"
+        style="@style/Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/ui_enable_discoverable"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
