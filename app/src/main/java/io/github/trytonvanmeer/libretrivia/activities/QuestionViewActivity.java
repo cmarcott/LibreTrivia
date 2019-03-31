@@ -20,8 +20,18 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+
+//Share imports
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import android.os.Environment;
+import android.widget.Toast;
+import android.content.Context;
+
 
 public class QuestionViewActivity extends BaseActivity {
 
@@ -267,4 +277,30 @@ public class QuestionViewActivity extends BaseActivity {
         QuestionCardView adapter = new QuestionCardView(this, questionList);
         recyclerView.setAdapter(adapter);
     }
+
+    /**
+    public void shareQuestion(){
+        String filename = "questions.txt";
+        String fileBody = "This better work";
+        FileOutputStream outputStream;
+
+        File file = new File(getApplicationContext().getFilesDir(), "activities");
+        if(!file.exists()) {
+            file.mkdir();
+        }
+
+        try{
+            File gpxfile = new File(file, filename);
+            FileWriter writer = new FileWriter(gpxfile);
+            writer.append(fileBody);
+            writer.flush();
+            writer.close();
+            Log.d("SHARE", "File created in "+getApplicationContext().getFilesDir()+" ");
+        }catch (Exception e){
+            e.printStackTrace();
+            Log.d("SHARE", "Error! File not created");
+        }
+    }
+     */
+
 }

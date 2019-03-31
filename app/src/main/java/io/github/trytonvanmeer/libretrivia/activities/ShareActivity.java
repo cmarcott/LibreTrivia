@@ -8,6 +8,7 @@ import android.widget.Button;
 
 import butterknife.BindView;
 import io.github.trytonvanmeer.libretrivia.R;
+<<<<<<< Updated upstream
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -23,11 +24,50 @@ public class ShareActivity extends BaseActivity {
     Button btnEnableDiscoverable;
 
     private BluetoothAdapter bluetoothAdapter = null;
+=======
+import io.github.trytonvanmeer.libretrivia.database.SQLiteDBHelper;
+import io.github.trytonvanmeer.libretrivia.trivia.TriviaCategory;
+import io.github.trytonvanmeer.libretrivia.trivia.TriviaDifficulty;
+import io.github.trytonvanmeer.libretrivia.trivia.TriviaQuery;
+import io.github.trytonvanmeer.libretrivia.util.TypeUtil;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.ViewAnimator;
+import android.Manifest;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.Build;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListView;
+
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.UUID;
+
+public class ShareActivity extends BaseActivity {
+
+    BluetoothAdapter mBluetoothAdapter;
+    Button btnEnableDisable_Discoverable;
+
+    Button btnStartConnection;
+    Button btnSend;
+>>>>>>> Stashed changes
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_share);
+<<<<<<< Updated upstream
 
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (bluetoothAdapter == null) {
@@ -88,6 +128,16 @@ public class ShareActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         unregisterReceiver(receiver);
+=======
+        Button btnONOFF = (Button) findViewById(R.id.btnONOFF);
+//        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+//        btnONOFF.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                enableDisableBT();
+//            }
+//        });
+>>>>>>> Stashed changes
     }
 
 }

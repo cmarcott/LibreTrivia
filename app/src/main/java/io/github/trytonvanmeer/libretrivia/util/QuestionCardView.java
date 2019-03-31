@@ -1,6 +1,7 @@
 package io.github.trytonvanmeer.libretrivia.util;
 
 import androidx.recyclerview.widget.RecyclerView;
+import io.github.trytonvanmeer.libretrivia.LibreTriviaApplication;
 import io.github.trytonvanmeer.libretrivia.R;
 import io.github.trytonvanmeer.libretrivia.activities.BaseActivity;
 import io.github.trytonvanmeer.libretrivia.activities.QuestionViewActivity;
@@ -18,6 +19,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.util.List;
 
 public class QuestionCardView extends RecyclerView.Adapter<QuestionCardView.QuestionCardViewHolder>{
@@ -74,6 +77,30 @@ public class QuestionCardView extends RecyclerView.Adapter<QuestionCardView.Ques
 
         });
 
+        //Functionality to share question via Bluetooth
+        holder.card_share_button.setOnClickListener(v -> {
+            String filename = "questions.txt";
+            String fileBody = "This better work";
+
+            File file = new File(LibreTriviaApplication.getAppContext().getFilesDir(), "activities");
+            if(!file.exists()) {
+                file.mkdir();
+            }
+
+            try{
+                File gpxfile = new File(file, filename);
+                FileWriter writer = new FileWriter(gpxfile);
+                writer.append(fileBody);
+                writer.flush();
+                writer.close();
+                Log.d("SHARE", "File created in "+LibreTriviaApplication.getAppContext().getFilesDir()+" ");
+            }catch (Exception e){
+                e.printStackTrace();
+                Log.d("SHARE", "Error! File not created");
+            }
+
+        });
+
         // Build card based on type of question.
         if(question instanceof TriviaQuestionMultiple){
 
@@ -94,6 +121,7 @@ public class QuestionCardView extends RecyclerView.Adapter<QuestionCardView.Ques
         }
     }
 
+
     @Override
     public int getItemCount() {
         return questionList.size();
@@ -111,6 +139,7 @@ public class QuestionCardView extends RecyclerView.Adapter<QuestionCardView.Ques
                 multiple_card_option_4;
 
         Button card_delete_button;
+        Button card_share_button;
         public QuestionCardViewHolder(View itemView) {
             super(itemView);
 
@@ -125,6 +154,7 @@ public class QuestionCardView extends RecyclerView.Adapter<QuestionCardView.Ques
             multiple_card_option_3 = itemView.findViewById(R.id.multiple_card_option_3);
             multiple_card_option_4 = itemView.findViewById(R.id.multiple_card_option_4);
             card_delete_button = itemView.findViewById(R.id.card_delete_button);
+            card_share_button = itemView.findViewById(R.id.card_share_button);
 
         }
     }
