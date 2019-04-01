@@ -11,6 +11,7 @@ import io.github.trytonvanmeer.libretrivia.trivia.TriviaQuestion;
 import io.github.trytonvanmeer.libretrivia.trivia.TriviaQuestionBoolean;
 import io.github.trytonvanmeer.libretrivia.trivia.TriviaQuestionMultiple;
 import io.github.trytonvanmeer.libretrivia.util.QuestionCardView;
+import io.github.trytonvanmeer.libretrivia.util.TypeUtil;
 
 import android.database.Cursor;
 import android.os.Bundle;
@@ -20,17 +21,27 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
-import java.io.FileOutputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map.Entry;
+import java.util.HashSet;
 import java.util.List;
 
-//Share imports
 import java.io.File;
 import java.io.FileWriter;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
-import android.os.Environment;
-import android.widget.Toast;
-import android.content.Context;
+import java.util.ListIterator;
+import java.util.Set;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 
 public class QuestionViewActivity extends BaseActivity {
@@ -40,9 +51,9 @@ public class QuestionViewActivity extends BaseActivity {
     @BindView(R.id.spinner_filter_diff)
     Spinner spinnerFilterDiff;
 
-
     private RecyclerView recyclerView;
     private List<TriviaQuestion> questionList;
+    private JSONArray questionArray = new JSONArray();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +61,9 @@ public class QuestionViewActivity extends BaseActivity {
         setContentView(R.layout.activity_question_view);
         ButterKnife.bind(this);
 
-        // Fill the category spinner.
+        checkSharedFile();
 
+        // Fill the category spinner.
         spinnerFilterCat.setAdapter(
                 new ArrayAdapter<>(
                         this, android.R.layout.simple_list_item_1, TriviaCategory.values()));
@@ -278,29 +290,101 @@ public class QuestionViewActivity extends BaseActivity {
         recyclerView.setAdapter(adapter);
     }
 
-    /**
-    public void shareQuestion(){
-        String filename = "questions.txt";
-        String fileBody = "This better work";
-        FileOutputStream outputStream;
+    public void checkSharedFile() {
+        Log.d("FILE", "Checking for shared questions");
+        String filename = "questionsJSON.txt";
+        String questionJSON;
+        JSONObject jsonObj;
 
-        File file = new File(getApplicationContext().getFilesDir(), "activities");
-        if(!file.exists()) {
-            file.mkdir();
+        //Check if shared questions directory & file exist
+        File sharedFileDir = new File(this.getApplicationContext().getFilesDir(), "shared_bluetooth_questions");
+        if (sharedFileDir.exists()) {
+            File sharedFile = new File(sharedFileDir, filename);
+
+            try {
+                if (sharedFile.exists()) {
+                    //File reading
+                    FileInputStream inputStream = new FileInputStream(sharedFile);
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+                    String line;
+
+                    try {
+                        line = reader.readLine();
+                        while (line != null) {
+                            Log.d("FILE", line);
+                            questionJSON = line;
+
+                            //Create JSONObject from file and insert into JSONArray
+                            try {
+                                jsonObj = new JSONObject(questionJSON);
+                                questionArray.put(jsonObj);
+
+                            } catch (Exception e) {
+                                e.printStackTrace();
+
+                            }
+                            line = reader.readLine();
+                        }
+                    } catch(IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } catch(FileNotFoundException e) {
+                e.printStackTrace();
+            }
+
         }
 
-        try{
-            File gpxfile = new File(file, filename);
-            FileWriter writer = new FileWriter(gpxfile);
-            writer.append(fileBody);
-            writer.flush();
-            writer.close();
-            Log.d("SHARE", "File created in "+getApplicationContext().getFilesDir()+" ");
-        }catch (Exception e){
+        String question;
+        String category, difficulty, type;
+        String a1, a2, a3, a4;
+        Integer diff, typ;
+        HashMap<String, String> hashMap = new HashMap<String, String>();
+
+        //Add HashMap<question, index> to avoid duplicate questions and
+        //retrieve the unique indices
+        try {
+            for (int i = 0; i < questionArray.length(); i++) {
+                JSONObject questionObject = questionArray.getJSONObject(i);
+                question = questionObject.getString("question");
+                hashMap.put(question, String.valueOf(i));
+            }
+
+        } catch (Exception e) {
             e.printStackTrace();
-            Log.d("SHARE", "Error! File not created");
         }
+
+        //Iterate through questions and add to Database
+        for (HashMap.Entry<String, String> entry : hashMap.entrySet()) {
+            int index = Integer.parseInt(entry.getValue());
+            try {
+                JSONObject questionObject = questionArray.getJSONObject(index);
+                question = questionObject.getString("question");
+                category = questionObject.getString("category");
+                diff = TypeUtil.convertDifficultyToInt(questionObject.getString("difficulty"));
+                typ = TypeUtil.convertTypeToInt(questionObject.getString("type"));
+                a1 = questionObject.getString("a1");
+                a2 = questionObject.getString("a2");
+                a3 = questionObject.getString("a3");
+                a4 = questionObject.getString("a4");
+
+                if (typ == TypeUtil.TF_TYPE) {
+                    BaseActivity.myDb.insertCustomQuestion(question, category, diff, typ, new ArrayList<String>(Arrays.asList(TypeUtil.returnBooleanAnswer(a1))));
+                } else {
+                    //typ == TypeUtil.MC_TYPE
+                    BaseActivity.myDb.insertCustomQuestion(question, category, diff, typ, new ArrayList<String>(Arrays.asList(a1, a2, a3, a4)));
+                }
+
+                Log.d("IMPORT", "Question imported");
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        Log.d("JSON", questionArray.toString());
+
     }
-     */
 
 }

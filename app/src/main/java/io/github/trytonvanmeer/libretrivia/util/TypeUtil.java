@@ -38,6 +38,29 @@ public class TypeUtil {
         return typ;
     }
 
+    public static Integer convertTypeToInt(String type) {
+        Integer typ = null;
+        switch (type) {
+            case "boolean":
+                typ = TF_TYPE;
+                break;
+            case "multiple":
+                typ = MC_TYPE;
+        }
+
+        return typ;
+    }
+
+    public static String returnBooleanAnswer(String answer) {
+        if (answer.toLowerCase().equals("false")) {
+            return "False";
+        } else if (answer.toLowerCase().equals("true")) {
+            return "True";
+        }
+        Log.w("TypeUtil", "No Match found, returning null result: " + answer);
+        return null;
+    }
+
     public static String returnOppositeBooleanAnswer(String a1) {
         if (a1.toLowerCase().equals("false")) {
             return "True";

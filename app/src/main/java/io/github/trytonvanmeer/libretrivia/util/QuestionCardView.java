@@ -23,6 +23,10 @@ import java.io.File;
 import java.io.FileWriter;
 import java.util.List;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class QuestionCardView extends RecyclerView.Adapter<QuestionCardView.QuestionCardViewHolder>{
 
     // Use this context to inflate the layout.
@@ -77,30 +81,6 @@ public class QuestionCardView extends RecyclerView.Adapter<QuestionCardView.Ques
 
         });
 
-        //Functionality to share question via Bluetooth
-        holder.card_share_button.setOnClickListener(v -> {
-            String filename = "questions.txt";
-            String fileBody = "This better work";
-
-            File file = new File(LibreTriviaApplication.getAppContext().getFilesDir(), "activities");
-            if(!file.exists()) {
-                file.mkdir();
-            }
-
-            try{
-                File gpxfile = new File(file, filename);
-                FileWriter writer = new FileWriter(gpxfile);
-                writer.append(fileBody);
-                writer.flush();
-                writer.close();
-                Log.d("SHARE", "File created in "+LibreTriviaApplication.getAppContext().getFilesDir()+" ");
-            }catch (Exception e){
-                e.printStackTrace();
-                Log.d("SHARE", "Error! File not created");
-            }
-
-        });
-
         // Build card based on type of question.
         if(question instanceof TriviaQuestionMultiple){
 
@@ -119,6 +99,74 @@ public class QuestionCardView extends RecyclerView.Adapter<QuestionCardView.Ques
             holder.multiple_card_option_4.setText("");
 
         }
+
+        //Functionality to share question via Bluetooth
+        holder.card_share_button.setOnClickListener(v -> {
+            String filename = "questionsJSON.txt";
+            String fileBody;
+
+            // When delete button is pressed, get question text.
+            String questionText = holder.multiple_card_question.getText().toString();
+            String category = holder.multiple_card_cat.getText().toString();
+            String diff = holder.multiple_card_diff.getText().toString();
+            String a1, a2, a3, a4;
+            String type;
+            JSONObject jsonObj = new JSONObject();
+
+            if(question instanceof TriviaQuestionMultiple){
+                a1 = (((TriviaQuestionMultiple) question).getAnswerList()[0]);
+                a2 = (((TriviaQuestionMultiple) question).getAnswerList()[1]);
+                a3 = (((TriviaQuestionMultiple) question).getAnswerList()[2]);
+                a4 = (((TriviaQuestionMultiple) question).getAnswerList()[3]);
+                type = "multiple";
+
+            }else{
+                a1 = (((TriviaQuestionBoolean) question).getBooleanAnswer().toString());
+                a2 = "";
+                a3 = "";
+                a4 = "";
+                type = "boolean";
+
+            }
+
+            try{
+                jsonObj.put("question", questionText);
+                jsonObj.put("category", category);
+                jsonObj.put("difficulty", diff);
+                jsonObj.put("type", type);
+                jsonObj.put("a1", a1);
+                jsonObj.put("a2", a2);
+                jsonObj.put("a3", a3);
+                jsonObj.put("a4", a4);
+            } catch(JSONException e) {
+                e.printStackTrace();
+            }
+
+            fileBody = jsonObj.toString();
+            Log.d("JSON", fileBody);
+
+            //Get application path and write JSONObject to file
+            File file = new File(LibreTriviaApplication.getAppContext().getFilesDir(), "shared_bluetooth_questions");
+            if(!file.exists()) {
+                file.mkdir();
+            } else {
+                fileBody = "\n" + fileBody;
+            }
+
+            try{
+                File gpxfile = new File(file, filename);
+                FileWriter writer = new FileWriter(gpxfile, true);
+                writer.append(fileBody);
+                writer.flush();
+                writer.close();
+                Log.d("SHARE", "File created in "+LibreTriviaApplication.getAppContext().getFilesDir()+" ");
+                Toast.makeText(LibreTriviaApplication.getAppContext(), "Question successfully shared via Bluetooth", Toast.LENGTH_SHORT).show();
+            }catch (Exception e){
+                e.printStackTrace();
+                Log.d("SHARE", "Error! File not created");
+            }
+
+        });
     }
 
 
