@@ -20,11 +20,18 @@
         android:gravity="right"
         android:layout_toRightOf="@id/spinner_filter_cat" />
 
+    <Spinner
+        android:id="@+id/spinner_sort"
+        style="@style/Spinner"
+        android:layout_width="fill_parent"
+        android:gravity="right"
+        android:layout_below="@id/spinner_filter_cat" />
+
     <View
         android:id="@+id/hor_line"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_below="@id/spinner_filter_diff"
+        android:layout_below="@id/spinner_sort"
         android:background="@android:color/darker_gray"/>
 
     <ScrollView android:layout_width="match_parent"
