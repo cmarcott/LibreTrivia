@@ -15,8 +15,13 @@ import io.github.trytonvanmeer.libretrivia.util.TypeUtil;
 
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Build;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
@@ -43,6 +48,22 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.Manifest;
+import android.app.Activity;
+import android.content.ContentUris;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.database.Cursor;
+import android.net.Uri;
+import android.provider.DocumentsContract;
+import android.provider.MediaStore;
+import androidx.core.content.ContextCompat;
+//import android.support.v4.content.ContextCompat;
+//import android.support.v7.app.ActionBarActivity;
+//import android.support.v7.app.AppCompatActivity;
+
 
 public class QuestionViewActivity extends BaseActivity {
 
@@ -55,11 +76,31 @@ public class QuestionViewActivity extends BaseActivity {
     private List<TriviaQuestion> questionList;
     private JSONArray questionArray = new JSONArray();
 
+    private static final String filename = "questionsJSON.txt";
+
+    private static final String[] INITIAL_PERMS = {Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.READ_CONTACTS,
+            Manifest.permission.WRITE_CONTACTS,
+            Manifest.permission.CAMERA,
+            Manifest.permission.ACCESS_FINE_LOCATION};
+
+    private static final int INITIAL_REQUEST = 1337;
+
+    private static final int REQUEST_WRITE_STORAGE = INITIAL_REQUEST + 4;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_question_view);
         ButterKnife.bind(this);
+
+        // Request storage permissions to write/read custom question file
+        if (!canAccessLocation() || !canAccessCamera() || !canAccessWriteStorage() || !canAccessReadStorage() || !canAccessReadContacts() || !canAccessWriteContacts()) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(INITIAL_PERMS, INITIAL_REQUEST);
+            }
+        }
 
         checkSharedFile();
 
@@ -292,12 +333,11 @@ public class QuestionViewActivity extends BaseActivity {
 
     public void checkSharedFile() {
         Log.d("FILE", "Checking for shared questions");
-        String filename = "questionsJSON.txt";
         String questionJSON;
         JSONObject jsonObj;
 
         //Check if shared questions directory & file exist
-        File sharedFileDir = new File(this.getApplicationContext().getFilesDir(), "shared_bluetooth_questions");
+        File sharedFileDir = new File(this.getApplicationContext().getExternalFilesDir(null), "shared_bluetooth_questions");
         if (sharedFileDir.exists()) {
             File sharedFile = new File(sharedFileDir, filename);
 
@@ -375,7 +415,7 @@ public class QuestionViewActivity extends BaseActivity {
                     BaseActivity.myDb.insertCustomQuestion(question, category, diff, typ, new ArrayList<String>(Arrays.asList(a1, a2, a3, a4)));
                 }
 
-                Log.d("IMPORT", "Question imported");
+                Log.d("IMPORT", "Custom Question(s) imported");
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -385,6 +425,55 @@ public class QuestionViewActivity extends BaseActivity {
 
         Log.d("JSON", questionArray.toString());
 
+    }
+
+    public void sendFile(Button shareBtn) {
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+
+        switch (requestCode) {
+
+            case REQUEST_WRITE_STORAGE:
+                if (canAccessWriteStorage()) {
+                    //reload my activity with permission granted or use the features what required the permission
+                    Log.d("BLUETOOTH", "Write permission granted");
+
+                } else {
+                    Toast.makeText(this, "The app was not allowed to write to your storage. Please consider granting it permission to receive questions", Toast.LENGTH_LONG).show();
+                }
+                break;
+        }
+    }
+
+    private boolean canAccessWriteStorage() {
+        return (hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE));
+    }
+
+    private boolean canAccessReadStorage() {
+        return (hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE));
+    }
+
+    private boolean canAccessReadContacts() {
+        return (hasPermission(Manifest.permission.READ_CONTACTS));
+    }
+
+    private boolean canAccessWriteContacts() {
+        return (hasPermission(Manifest.permission.WRITE_CONTACTS));
+    }
+
+    private boolean canAccessCamera() {
+        return (hasPermission(Manifest.permission.CAMERA));
+    }
+
+    private boolean canAccessLocation() {
+        return (hasPermission(Manifest.permission.ACCESS_FINE_LOCATION));
+    }
+
+    private boolean hasPermission(String perm) {
+        return (PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(this, perm));
     }
 
 }
