@@ -34,11 +34,11 @@ public class HighScoresActivity extends BaseActivity {
 
         buttonClear.setOnClickListener(v -> {
             new AlertDialog.Builder(this)
-                    .setTitle(R.string.ui_quit_game)
-                    .setMessage(R.string.ui_quit_game_msg)
+                    .setTitle(R.string.ui_clear_scores)
+                    .setMessage(R.string.ui_clear_scores_msg)
                     .setPositiveButton(android.R.string.yes, (dialog, which) -> {
                         BaseActivity.myDb.clearHighScores();
-                        this.onCreate(savedInstanceState);
+                        listAll();
                     })
                     .setNegativeButton(android.R.string.no, (dialog, which) -> {
                     })

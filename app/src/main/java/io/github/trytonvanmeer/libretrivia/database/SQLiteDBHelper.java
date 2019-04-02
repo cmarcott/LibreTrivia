@@ -44,6 +44,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
     public static final String HS_COLUMN_CATEGORY = "category";
     public static final String HS_COLUMN_DIFFICULTY = "difficulty";
     public static final String HS_COLUMN_QUIZ_LENGTH = "quiz_length";
+    public static final int MAX_NUM_SCORES = 5;
 
 
     public SQLiteDBHelper(Context context) {
@@ -277,8 +278,23 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
 
         if (result == TypeUtil.RETURN_ERROR) {
             return false;
-        } else {
-            return true;
+        }
+
+        manageHSTableSize();
+
+        return true;
+    }
+
+    //Removes the worst of the top scores if the table is "full"
+    private void manageHSTableSize() {
+
+        Cursor cursor = getAllHighScores();
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        while (cursor.getCount() > MAX_NUM_SCORES) {
+            db.delete(HS_TABLE_NAME,HS_COLUMN_ID + " = (SELECT MIN (" + HS_COLUMN_ID + ") FROM (SELECT * FROM " + HS_TABLE_NAME + " WHERE " + HS_COLUMN_SCORE + " = (SELECT MIN(" + HS_COLUMN_SCORE + ") FROM " + HS_TABLE_NAME + ")))", null);
+
+            cursor = getAllHighScores();
         }
     }
 
