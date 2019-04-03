@@ -1,12 +1,9 @@
 package io.github.trytonvanmeer.libretrivia.activities;
 
+import android.database.Cursor;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
-
-import android.database.Cursor;
-import io.github.trytonvanmeer.libretrivia.database.SQLiteDBHelper;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

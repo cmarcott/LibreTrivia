@@ -1,5 +1,32 @@
 package io.github.trytonvanmeer.libretrivia.activities;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.os.Build;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+import android.widget.Toast;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
@@ -12,57 +39,6 @@ import io.github.trytonvanmeer.libretrivia.trivia.TriviaQuestionBoolean;
 import io.github.trytonvanmeer.libretrivia.trivia.TriviaQuestionMultiple;
 import io.github.trytonvanmeer.libretrivia.util.QuestionCardView;
 import io.github.trytonvanmeer.libretrivia.util.TypeUtil;
-
-import android.database.Cursor;
-import android.os.Bundle;
-import android.os.Build;
-import android.os.Environment;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
-
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map.Entry;
-import java.util.HashSet;
-import java.util.List;
-
-import java.io.File;
-import java.io.FileWriter;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ListIterator;
-import java.util.Set;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import android.Manifest;
-import android.app.Activity;
-import android.content.ContentUris;
-import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
-import android.database.Cursor;
-import android.net.Uri;
-import android.provider.DocumentsContract;
-import android.provider.MediaStore;
-import androidx.core.content.ContextCompat;
-//import android.support.v4.content.ContextCompat;
-//import android.support.v7.app.ActionBarActivity;
-//import android.support.v7.app.AppCompatActivity;
 
 
 public class QuestionViewActivity extends BaseActivity {
@@ -77,6 +53,7 @@ public class QuestionViewActivity extends BaseActivity {
     private JSONArray questionArray = new JSONArray();
 
     private static final String filename = "questionsJSON.txt";
+    private static final String filePath = "/sdcard/bluetooth";
 
     private static final String[] INITIAL_PERMS = {Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -337,10 +314,9 @@ public class QuestionViewActivity extends BaseActivity {
         JSONObject jsonObj;
 
         //Check if shared questions directory & file exist
-        File sharedFileDir = new File(this.getApplicationContext().getExternalFilesDir(null), "shared_bluetooth_questions");
+        File sharedFileDir = new File(filePath);
+        File sharedFile = new File(sharedFileDir, filename);
         if (sharedFileDir.exists()) {
-            File sharedFile = new File(sharedFileDir, filename);
-
             try {
                 if (sharedFile.exists()) {
                     //File reading
@@ -365,16 +341,27 @@ public class QuestionViewActivity extends BaseActivity {
                             }
                             line = reader.readLine();
                         }
+
+                        importQuestions();
+                        sharedFile.delete();
+                        Log.d("FILE", " "+sharedFile+" deleted");
+
                     } catch(IOException e) {
                         e.printStackTrace();
                     }
                 }
+                Log.d("IMPORT", "No file to import");
+
             } catch(FileNotFoundException e) {
                 e.printStackTrace();
             }
 
         }
 
+
+    }
+
+    public void importQuestions() {
         String question;
         String category, difficulty, type;
         String a1, a2, a3, a4;
@@ -424,10 +411,6 @@ public class QuestionViewActivity extends BaseActivity {
         }
 
         Log.d("JSON", questionArray.toString());
-
-    }
-
-    public void sendFile(Button shareBtn) {
 
     }
 

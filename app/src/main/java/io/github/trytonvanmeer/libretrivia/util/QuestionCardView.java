@@ -6,25 +6,15 @@ import io.github.trytonvanmeer.libretrivia.LibreTriviaApplication;
 import io.github.trytonvanmeer.libretrivia.R;
 import io.github.trytonvanmeer.libretrivia.activities.BaseActivity;
 import io.github.trytonvanmeer.libretrivia.activities.QuestionViewActivity;
-import io.github.trytonvanmeer.libretrivia.interfaces.OnBindCallBack;
 import io.github.trytonvanmeer.libretrivia.trivia.TriviaQuestion;
 import io.github.trytonvanmeer.libretrivia.trivia.TriviaQuestionBoolean;
 import io.github.trytonvanmeer.libretrivia.trivia.TriviaQuestionMultiple;
-import io.github.trytonvanmeer.libretrivia.bluetooth.BluetoothShareService;
-
-import android.Manifest;
-import android.app.Activity;
-import android.os.Build;
-import android.os.Bundle;
-import android.os.Environment;
 
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
-import android.content.ContentUris;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,11 +24,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.util.List;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -58,8 +46,6 @@ public class QuestionCardView extends RecyclerView.Adapter<QuestionCardView.Ques
         this.questionList = questionList;
     }
 
-    public OnBindCallBack onBind;
-
     // Bluetooth adapter for sharing questions
     private BluetoothAdapter bluetoothAdapter = null;
 
@@ -76,12 +62,6 @@ public class QuestionCardView extends RecyclerView.Adapter<QuestionCardView.Ques
     // Populate a card with Trivia Question Data.
     @Override
     public void onBindViewHolder(QuestionCardViewHolder holder, int position) {
-
-        /**
-        if (onBind != null) {
-            onBind.onViewBound(holder, position);
-        }
-         */
 
         // Get the question of the specified position.
         TriviaQuestion question = questionList.get(position);
@@ -135,6 +115,11 @@ public class QuestionCardView extends RecyclerView.Adapter<QuestionCardView.Ques
 
         //Functionality to share question via Bluetooth
         holder.card_share_button.setOnClickListener(v -> {
+            if (bluetoothAdapter == null) {
+                Toast.makeText(LibreTriviaApplication.getAppContext(), "Bluetooth is not available", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             if (!bluetoothAdapter.isEnabled()) {
                 Toast.makeText(LibreTriviaApplication.getAppContext(), "Bluetooth is not enabled", Toast.LENGTH_SHORT).show();
                 return;
@@ -180,50 +165,34 @@ public class QuestionCardView extends RecyclerView.Adapter<QuestionCardView.Ques
             }
 
             fileBody = jsonObj.toString();
-            Log.d("JSON", fileBody);
 
             //Get application path and write JSONObject to file
             File file = new File(LibreTriviaApplication.getAppContext().getExternalFilesDir(null), "shared_bluetooth_questions");
             if(!file.exists()) {
                 file.mkdir();
-            } else {
-                fileBody = "\n" + fileBody;
             }
 
+            Context context = v.getContext();
             File questionFile = null;
-            try{
+
+            try{ //Create and write JSON formatted question to file
                 questionFile = new File(file, filename);
-                FileWriter writer = new FileWriter(questionFile, true);
+                FileWriter writer = new FileWriter(questionFile);
                 writer.append(fileBody);
                 writer.flush();
                 writer.close();
                 Log.d("SHARE", "File created in "+LibreTriviaApplication.getAppContext().getExternalFilesDir(null)+" ");
 
-            }catch (Exception e){
-                e.printStackTrace();
-                Log.d("SHARE", "Error! File not created");
-            }
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.setType("text/plain");
 
-            //Bluetooth sharing
-            Intent discoveryIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
-            discoveryIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300);
-            //startActivityForResult(discoveryIntent, 1);
-
-            try {
-                Intent bluetoothIntent = new Intent();
-                Log.d("BLUETOOTH", "try mf");
-                Uri fileUri = FileProvider.getUriForFile(mCtx,
-                        LibreTriviaApplication.getAppContext().getPackageName()
-                        + ".provider", questionFile);
-                Log.d("BLUETOOTH", fileUri.toString());
-                bluetoothIntent.setAction(Intent.ACTION_SEND);
-                bluetoothIntent.setType("*/*");
-                bluetoothIntent.putExtra(Intent.EXTRA_STREAM, fileUri);
+                sendIntent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName() + ".fileprovider", questionFile));
 
                 PackageManager pm = LibreTriviaApplication.getAppContext().getPackageManager();
-                List<ResolveInfo> appsList = pm.queryIntentActivities(bluetoothIntent, 0);
+                List<ResolveInfo> appsList = pm.queryIntentActivities(sendIntent, 0);
 
-                if (appsList.size() > 0) {
+                if (appsList.size() > 0) { //List paired Bluetooth devices
                     String packageName = null;
                     String className = null;
                     boolean found = false;
@@ -236,23 +205,26 @@ public class QuestionCardView extends RecyclerView.Adapter<QuestionCardView.Ques
                             break;
                         }
                     }
-
                     if (!found) {
                         Toast.makeText(LibreTriviaApplication.getAppContext(), "Bluetooth has not been found",
                                 Toast.LENGTH_LONG).show();
                     } else {
-                        bluetoothIntent.setClassName(packageName, className);
-                        mCtx.startActivity(bluetoothIntent);
+                        //Send file
+                        sendIntent.setClassName(packageName, className);
+                        sendIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        sendIntent.setFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                        context.startActivity(sendIntent);
                     }
 
                 }
-            } catch (Exception e) {
+
+            }catch (Exception e){
                 e.printStackTrace();
+                Log.d("SHARE", "Error! File not created");
             }
 
         });
     }
-
 
     @Override
     public int getItemCount() {
@@ -289,7 +261,6 @@ public class QuestionCardView extends RecyclerView.Adapter<QuestionCardView.Ques
 
         }
 
-
     }
 
     public void removeAt(int position) {
@@ -297,6 +268,5 @@ public class QuestionCardView extends RecyclerView.Adapter<QuestionCardView.Ques
         notifyItemRemoved(position);
         notifyItemRangeChanged(position, questionList.size());
     }
-
 
 }
