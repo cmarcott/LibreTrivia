@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Collections;
 
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -47,6 +48,8 @@ public class QuestionViewActivity extends BaseActivity {
     Spinner spinnerFilterCat;
     @BindView(R.id.spinner_filter_diff)
     Spinner spinnerFilterDiff;
+    @BindView(R.id.spinner_sort)
+    Spinner spinnerSort;
 
     private RecyclerView recyclerView;
     private List<TriviaQuestion> questionList;
@@ -99,6 +102,21 @@ public class QuestionViewActivity extends BaseActivity {
         diffAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerFilterDiff.setAdapter(diffAdapter);
 
+        // Fill the sorting filter.
+        List<String> sortArray =  new ArrayList<String>();
+        sortArray.add("Category Ascending");
+        sortArray.add("Category Descending");
+        sortArray.add("Question Ascending");
+        sortArray.add("Question Descending");
+        sortArray.add("Difficulty Ascending");
+        sortArray.add("Difficulty Descending");
+
+        ArrayAdapter<String> sortAdapter = new ArrayAdapter<String>(
+                this, android.R.layout.simple_list_item_1, sortArray);
+
+        sortAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerSort.setAdapter(sortAdapter);
+
         // Create action listener for category change.
         spinnerFilterCat.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -107,6 +125,7 @@ public class QuestionViewActivity extends BaseActivity {
                 String diffstr = spinnerFilterDiff.getSelectedItem().toString();
 
                 listSpecific(catstr, diffstr);
+                sortList();
             }
 
             @Override
@@ -123,6 +142,7 @@ public class QuestionViewActivity extends BaseActivity {
                 String diffstr = spinnerFilterDiff.getSelectedItem().toString();
 
                 listSpecific(catstr, diffstr);
+                sortList();
             }
 
             @Override
@@ -132,10 +152,68 @@ public class QuestionViewActivity extends BaseActivity {
 
         });
 
+        // Listener for sorting
+        spinnerSort.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+
+
+                sortList();
+
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // Do something else
+            }
+
+        });
+
+
+        QuestionCardView adapter = new QuestionCardView(this, questionList);
+
         listAll();
 
 
 
+    }
+
+    public void sortList(){
+
+        String sortSelection = spinnerSort.getSelectedItem().toString();
+
+        if(sortSelection.equals("Category Ascending")){
+
+            Collections.sort(questionList, TriviaQuestion.CategoryComparator);
+
+        }else if(sortSelection.equals("Category Descending")){
+
+            Collections.sort(questionList, TriviaQuestion.CategoryComparator);
+            Collections.reverse(questionList);
+
+        }else if(sortSelection.equals("Question Ascending")){
+
+            Collections.sort(questionList, TriviaQuestion.QuestionTextComparator);
+
+        }else if(sortSelection.equals("Question Descending")){
+
+            Collections.sort(questionList, TriviaQuestion.QuestionTextComparator);
+            Collections.reverse(questionList);
+
+        }else if(sortSelection.equals("Difficulty Ascending")){
+
+            Collections.sort(questionList, TriviaQuestion.DifficultyComparator);
+
+        }else if(sortSelection.equals("Difficulty Descending")){
+
+            Collections.sort(questionList, TriviaQuestion.DifficultyComparator);
+            Collections.reverse(questionList);
+
+        }
+
+        QuestionCardView adapter = new QuestionCardView(this, questionList);
+        recyclerView.setAdapter(adapter);
     }
 
     public void listSpecific(String passCat, String passDif){
