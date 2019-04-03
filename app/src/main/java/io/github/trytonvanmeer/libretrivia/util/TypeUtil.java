@@ -1,5 +1,7 @@
 package io.github.trytonvanmeer.libretrivia.util;
 
+import android.util.Log;
+
 public class TypeUtil {
 
     // True/False type question
@@ -19,6 +21,88 @@ public class TypeUtil {
 
     // Error Return
     public static final int RETURN_ERROR = -1;
+
+
+    // Helper function to convert types to JSON acceptable string
+    public static String convertTypeToString(Integer type) {
+        String typ = null;
+        switch (type) {
+            case TF_TYPE:
+                typ = "boolean";
+                break;
+            case MC_TYPE:
+                typ = "multiple";
+                break;
+        }
+
+        return typ;
+    }
+
+    public static Integer convertTypeToInt(String type) {
+        Integer typ = null;
+        switch (type) {
+            case "boolean":
+                typ = TF_TYPE;
+                break;
+            case "multiple":
+                typ = MC_TYPE;
+        }
+
+        return typ;
+    }
+
+    public static String returnBooleanAnswer(String answer) {
+        if (answer.toLowerCase().equals("false")) {
+            return "False";
+        } else if (answer.toLowerCase().equals("true")) {
+            return "True";
+        }
+        Log.w("TypeUtil", "No Match found, returning null result: " + answer);
+        return null;
+    }
+
+    public static String returnOppositeBooleanAnswer(String a1) {
+        if (a1.toLowerCase().equals("false")) {
+            return "True";
+        } else if (a1.toLowerCase().equals("true")) {
+            return "False";
+        }
+        Log.w("TypeUtil", "No Match found, returning null result: " + a1);
+        return null;
+    }
+
+    // Helper functions to convert difficulty types to needed format
+    public static Integer convertDifficultyToInt(String difficulty) {
+        Integer diff = null;
+        switch (difficulty) {
+            case "Easy":
+                diff = TypeUtil.EASY;
+                break;
+            case "Medium":
+                diff = TypeUtil.MEDIUM;
+                break;
+            case "Hard":
+                diff = TypeUtil.HARD;
+                break;
+        }
+        return diff;
+    }
+
+    public static String convertDifficultyToString(Integer difficulty) {
+        String diff = null;
+        switch (difficulty) {
+            case 0:
+                diff = "Easy";
+                break;
+            case 1:
+                diff = "Medium";
+                break;
+            case 2:
+                diff = "Hard";
+                break;
+        }
+        return diff;
+    }
 
 
 }

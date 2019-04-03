@@ -61,13 +61,23 @@
     <string name="ui_results_correct">Correct Answers</string>
     <string name="ui_results_wrong">Wrong Answers</string>
     <string name="ui_results_total">Total Questions</string>
+    <string name="ui_high_score">High Score</string>
+    <string name="ui_new_high_score">**NEW HIGH SCORE**</string>
     <string name="ui_return_to_menu">Return To Menu</string>
     <string name="ui_create_correct_header">Input Correct Answer</string>
     <string name="ui_create_incorrect_header">Input incorrect Answers</string>
+    <string name="ui_clear_high_scores">Clear</string>
+    <string name="ui_clear_scores">Clear High Scores</string>
+    <string name="ui_clear_scores_msg">Are you sure you want to clear the high scores?</string>
     <string name="ui_classic_mode" tools:ignore="MissingTranslation">Classic Mode</string>
     <string name="ui_custom_mode" tools:ignore="MissingTranslation">Custom Mode</string>
-    <string name="ui_high_score" tools:ignore="MissingTranslation">High Score</string>
     <string name="ui_share" tools:ignore="MissingTranslation">Share</string>
+    <string name="ui_scan_for_devices">Scan for Devices</string>
+    <string name="ui_enable_discoverable">Enable Discoverable</string>
+
+    <!-- Title Strings -->
+    <string name="title_paired_devices">Paired Devices</string>
+    <string name="title_other_devices">Other Available Devices</string>
 
     <!-- Error Strings -->
     <string name="error_network"><b>Networkin error!</b>\n Could not connect to a network.</string>

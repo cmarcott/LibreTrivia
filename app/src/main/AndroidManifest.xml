@@ -3,6 +3,12 @@
     package="io.github.trytonvanmeer.libretrivia">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
 
     <application
         android:name=".LibreTriviaApplication"
@@ -12,6 +18,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <provider
+            android:authorities="${applicationId}.fileprovider"
+            android:name=".bluetooth.BluetoothShareService"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths"/>
+        </provider>
         <activity android:name=".activities.QuestionViewActivity"></activity>
         <activity android:name=".activities.QuestionCreateActivity" />
         <activity android:name=".activities.MainActivity">
@@ -26,6 +41,8 @@
         <activity android:name=".settings.SettingsActivity" />
         <activity android:name=".activities.ClassicModeActivity" />
         <activity android:name=".activities.CustomModeActivity" />
+        <activity android:name=".activities.HighScoresActivity" />
+
     </application>
 
 </manifest>

@@ -1,5 +1,33 @@
 package io.github.trytonvanmeer.libretrivia.activities;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.os.Build;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+import android.widget.Toast;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Collections;
+
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
@@ -11,17 +39,8 @@ import io.github.trytonvanmeer.libretrivia.trivia.TriviaQuestion;
 import io.github.trytonvanmeer.libretrivia.trivia.TriviaQuestionBoolean;
 import io.github.trytonvanmeer.libretrivia.trivia.TriviaQuestionMultiple;
 import io.github.trytonvanmeer.libretrivia.util.QuestionCardView;
+import io.github.trytonvanmeer.libretrivia.util.TypeUtil;
 
-import android.database.Cursor;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class QuestionViewActivity extends BaseActivity {
 
@@ -29,10 +48,26 @@ public class QuestionViewActivity extends BaseActivity {
     Spinner spinnerFilterCat;
     @BindView(R.id.spinner_filter_diff)
     Spinner spinnerFilterDiff;
-
+    @BindView(R.id.spinner_sort)
+    Spinner spinnerSort;
 
     private RecyclerView recyclerView;
     private List<TriviaQuestion> questionList;
+    private JSONArray questionArray = new JSONArray();
+
+    private static final String filename = "questionsJSON.txt";
+    private static final String filePath = "/sdcard/bluetooth";
+
+    private static final String[] INITIAL_PERMS = {Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.READ_CONTACTS,
+            Manifest.permission.WRITE_CONTACTS,
+            Manifest.permission.CAMERA,
+            Manifest.permission.ACCESS_FINE_LOCATION};
+
+    private static final int INITIAL_REQUEST = 1337;
+
+    private static final int REQUEST_WRITE_STORAGE = INITIAL_REQUEST + 4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,8 +75,16 @@ public class QuestionViewActivity extends BaseActivity {
         setContentView(R.layout.activity_question_view);
         ButterKnife.bind(this);
 
-        // Fill the category spinner.
+        // Request storage permissions to write/read custom question file
+        if (!canAccessLocation() || !canAccessCamera() || !canAccessWriteStorage() || !canAccessReadStorage() || !canAccessReadContacts() || !canAccessWriteContacts()) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(INITIAL_PERMS, INITIAL_REQUEST);
+            }
+        }
 
+        checkSharedFile();
+
+        // Fill the category spinner.
         spinnerFilterCat.setAdapter(
                 new ArrayAdapter<>(
                         this, android.R.layout.simple_list_item_1, TriviaCategory.values()));
@@ -59,6 +102,21 @@ public class QuestionViewActivity extends BaseActivity {
         diffAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerFilterDiff.setAdapter(diffAdapter);
 
+        // Fill the sorting filter.
+        List<String> sortArray =  new ArrayList<String>();
+        sortArray.add("Category Ascending");
+        sortArray.add("Category Descending");
+        sortArray.add("Question Ascending");
+        sortArray.add("Question Descending");
+        sortArray.add("Difficulty Ascending");
+        sortArray.add("Difficulty Descending");
+
+        ArrayAdapter<String> sortAdapter = new ArrayAdapter<String>(
+                this, android.R.layout.simple_list_item_1, sortArray);
+
+        sortAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerSort.setAdapter(sortAdapter);
+
         // Create action listener for category change.
         spinnerFilterCat.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -67,6 +125,7 @@ public class QuestionViewActivity extends BaseActivity {
                 String diffstr = spinnerFilterDiff.getSelectedItem().toString();
 
                 listSpecific(catstr, diffstr);
+                sortList();
             }
 
             @Override
@@ -83,6 +142,7 @@ public class QuestionViewActivity extends BaseActivity {
                 String diffstr = spinnerFilterDiff.getSelectedItem().toString();
 
                 listSpecific(catstr, diffstr);
+                sortList();
             }
 
             @Override
@@ -92,10 +152,68 @@ public class QuestionViewActivity extends BaseActivity {
 
         });
 
+        // Listener for sorting
+        spinnerSort.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+
+
+                sortList();
+
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // Do something else
+            }
+
+        });
+
+
+        QuestionCardView adapter = new QuestionCardView(this, questionList);
+
         listAll();
 
 
 
+    }
+
+    public void sortList(){
+
+        String sortSelection = spinnerSort.getSelectedItem().toString();
+
+        if(sortSelection.equals("Category Ascending")){
+
+            Collections.sort(questionList, TriviaQuestion.CategoryComparator);
+
+        }else if(sortSelection.equals("Category Descending")){
+
+            Collections.sort(questionList, TriviaQuestion.CategoryComparator);
+            Collections.reverse(questionList);
+
+        }else if(sortSelection.equals("Question Ascending")){
+
+            Collections.sort(questionList, TriviaQuestion.QuestionTextComparator);
+
+        }else if(sortSelection.equals("Question Descending")){
+
+            Collections.sort(questionList, TriviaQuestion.QuestionTextComparator);
+            Collections.reverse(questionList);
+
+        }else if(sortSelection.equals("Difficulty Ascending")){
+
+            Collections.sort(questionList, TriviaQuestion.DifficultyComparator);
+
+        }else if(sortSelection.equals("Difficulty Descending")){
+
+            Collections.sort(questionList, TriviaQuestion.DifficultyComparator);
+            Collections.reverse(questionList);
+
+        }
+
+        QuestionCardView adapter = new QuestionCardView(this, questionList);
+        recyclerView.setAdapter(adapter);
     }
 
     public void listSpecific(String passCat, String passDif){
@@ -267,4 +385,156 @@ public class QuestionViewActivity extends BaseActivity {
         QuestionCardView adapter = new QuestionCardView(this, questionList);
         recyclerView.setAdapter(adapter);
     }
+
+    public void checkSharedFile() {
+        Log.d("FILE", "Checking for shared questions");
+        String questionJSON;
+        JSONObject jsonObj;
+
+        //Check if shared questions directory & file exist
+        File sharedFileDir = new File(filePath);
+        File sharedFile = new File(sharedFileDir, filename);
+        if (sharedFileDir.exists()) {
+            try {
+                if (sharedFile.exists()) {
+                    //File reading
+                    FileInputStream inputStream = new FileInputStream(sharedFile);
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+                    String line;
+
+                    try {
+                        line = reader.readLine();
+                        while (line != null) {
+                            Log.d("FILE", line);
+                            questionJSON = line;
+
+                            //Create JSONObject from file and insert into JSONArray
+                            try {
+                                jsonObj = new JSONObject(questionJSON);
+                                questionArray.put(jsonObj);
+
+                            } catch (Exception e) {
+                                e.printStackTrace();
+
+                            }
+                            line = reader.readLine();
+                        }
+
+                        importQuestions();
+                        sharedFile.delete();
+                        Log.d("FILE", " "+sharedFile+" deleted");
+
+                    } catch(IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                Log.d("IMPORT", "No file to import");
+
+            } catch(FileNotFoundException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+
+    }
+
+    public void importQuestions() {
+        String question;
+        String category, difficulty, type;
+        String a1, a2, a3, a4;
+        Integer diff, typ;
+        HashMap<String, String> hashMap = new HashMap<String, String>();
+
+        //Add HashMap<question, index> to avoid duplicate questions and
+        //retrieve the unique indices
+        try {
+            for (int i = 0; i < questionArray.length(); i++) {
+                JSONObject questionObject = questionArray.getJSONObject(i);
+                question = questionObject.getString("question");
+                hashMap.put(question, String.valueOf(i));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        //Iterate through questions and add to Database
+        for (HashMap.Entry<String, String> entry : hashMap.entrySet()) {
+            int index = Integer.parseInt(entry.getValue());
+            try {
+                JSONObject questionObject = questionArray.getJSONObject(index);
+                question = questionObject.getString("question");
+                category = questionObject.getString("category");
+                diff = TypeUtil.convertDifficultyToInt(questionObject.getString("difficulty"));
+                typ = TypeUtil.convertTypeToInt(questionObject.getString("type"));
+                a1 = questionObject.getString("a1");
+                a2 = questionObject.getString("a2");
+                a3 = questionObject.getString("a3");
+                a4 = questionObject.getString("a4");
+
+                if (typ == TypeUtil.TF_TYPE) {
+                    BaseActivity.myDb.insertCustomQuestion(question, category, diff, typ, new ArrayList<String>(Arrays.asList(TypeUtil.returnBooleanAnswer(a1))));
+                } else {
+                    //typ == TypeUtil.MC_TYPE
+                    BaseActivity.myDb.insertCustomQuestion(question, category, diff, typ, new ArrayList<String>(Arrays.asList(a1, a2, a3, a4)));
+                }
+
+                Log.d("IMPORT", "Custom Question(s) imported");
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        Log.d("JSON", questionArray.toString());
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+
+        switch (requestCode) {
+
+            case REQUEST_WRITE_STORAGE:
+                if (canAccessWriteStorage()) {
+                    //reload my activity with permission granted or use the features what required the permission
+                    Log.d("BLUETOOTH", "Write permission granted");
+
+                } else {
+                    Toast.makeText(this, "The app was not allowed to write to your storage. Please consider granting it permission to receive questions", Toast.LENGTH_LONG).show();
+                }
+                break;
+        }
+    }
+
+    private boolean canAccessWriteStorage() {
+        return (hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE));
+    }
+
+    private boolean canAccessReadStorage() {
+        return (hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE));
+    }
+
+    private boolean canAccessReadContacts() {
+        return (hasPermission(Manifest.permission.READ_CONTACTS));
+    }
+
+    private boolean canAccessWriteContacts() {
+        return (hasPermission(Manifest.permission.WRITE_CONTACTS));
+    }
+
+    private boolean canAccessCamera() {
+        return (hasPermission(Manifest.permission.CAMERA));
+    }
+
+    private boolean canAccessLocation() {
+        return (hasPermission(Manifest.permission.ACCESS_FINE_LOCATION));
+    }
+
+    private boolean hasPermission(String perm) {
+        return (PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(this, perm));
+    }
+
 }

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -36,10 +37,21 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
     public static final String QUES_COLUMN_A3 = "a3";
     public static final String QUES_COLUMN_A4 = "a4";
 
+    /*High Scores table declarations*/
+    public static final String HS_TABLE_NAME = "high_scores";
+    public static final String HS_COLUMN_ID = "_id";
+    public static final String HS_COLUMN_SCORE = "score";
+    public static final String HS_COLUMN_CATEGORY = "category";
+    public static final String HS_COLUMN_DIFFICULTY = "difficulty";
+    public static final String HS_COLUMN_QUIZ_LENGTH = "quiz_length";
+    public static final int MAX_NUM_SCORES = 5;
+
 
     public SQLiteDBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
+
+    //need a new constructor that takes table name
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
@@ -55,13 +67,25 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
                 QUES_COLUMN_A3 + " TEXT, " +
                 QUES_COLUMN_A4 + " TEXT " +
                 " )");
+
+        // Create Custom Questions Table
+        sqLiteDatabase.execSQL("CREATE TABLE " + HS_TABLE_NAME + " (" +
+                HS_COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                HS_COLUMN_CATEGORY + " TEXT, " +
+                HS_COLUMN_DIFFICULTY + " TEXT, " +
+                HS_COLUMN_SCORE + " FLOAT, " +
+                HS_COLUMN_QUIZ_LENGTH + " TEXT " +
+                " )");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + QUES_TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + HS_TABLE_NAME);
         onCreate(sqLiteDatabase);
     }
+
+    //CUSTOM QUESTIONS
 
     /* insertCustomQuestion
      * A method used to insert a new custom question into the stored local database
@@ -124,30 +148,45 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
      * @param int difficulty - the difficulty of question to be matched, can be null
      * @return Cursor res - Cursor containing all custom questions
      */
-    public Cursor getSpecificCustomQuestions(String category, Integer difficulty) {
+    public Cursor getSpecificCustomQuestions(String category, Integer difficulty, Boolean randomize) {
         SQLiteDatabase db = this.getWritableDatabase();
+        String rawQuery = null;
         Cursor res;
+
+        // If both null just get all questions in database, equivalent to getAllCustomQuestions
+        if (difficulty == null && category == null) {
+            rawQuery = "SELECT * from " + QUES_TABLE_NAME;
         // If difficulty sent as null, pick any difficulty
-        if (difficulty == null) {
-            res = db.rawQuery("SELECT * from "
+        } else if (difficulty == null) {
+            rawQuery = "SELECT * from "
                     + QUES_TABLE_NAME + " WHERE "
                     + QUES_COLUMN_CATEGORY
-                    + " = " + category, null);
+                    + " = '" + category + "'";
+            Log.d("SQLiteDBHelper", "Option 1: " + rawQuery);
+
         // If category sent as null, pick any category
         } else if (category == null) {
-            res = db.rawQuery("SELECT * from "
+            rawQuery = "SELECT * from "
                     + QUES_TABLE_NAME + " WHERE "
                     + QUES_COLUMN_DIFFICULTY
-                    + " = " + difficulty, null);
+                    + " = " + difficulty;
+            Log.d("SQLiteDBHelper", "Option 2: " + rawQuery);
         // otherwise use both parameters
         } else {
-            res = db.rawQuery("SELECT * from "
+            rawQuery = "SELECT * from "
                     + QUES_TABLE_NAME + " WHERE "
                     + QUES_COLUMN_CATEGORY
-                    + " = " + category + " AND "
+                    + " = '" + category + "'" + " AND "
                     + QUES_COLUMN_DIFFICULTY
-                    + " = " + difficulty, null);
+                    + " = " + difficulty;
+
+            Log.d("SQLiteDBHelper", "Option 3: " + rawQuery);
         }
+
+        // Randomize quetions so quizzes arent all the same
+        if (randomize) { rawQuery = rawQuery + " ORDER BY random()";}
+
+        res = db.rawQuery(rawQuery, null);
         return res;
     }
 
@@ -173,7 +212,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
     }
 
     /* updateCustomQuestion
-     * @depracated
+     * @deprecated
      * Update a particular custom question based on id value
      * @param String id - The id of the question to be updated
      * @param String question - The question being asked
@@ -210,5 +249,87 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         return db.delete(QUES_TABLE_NAME, null, null);
     }
 
+    //HIGH SCORES
 
+    /**
+     * Adds a new high score to the database. Removes the lowest high score if the table
+     * is at capacity.
+     *
+     * @param score      Score for the session.
+     * @param category   Category for the session.
+     * @param difficulty Difficulty of questions for the session
+     * @param quizLength Number of questions in the session
+     *
+     * @return true on success, false on failure
+     *
+     * @author dnoel
+     */
+    public boolean insertHighScore(float score, String category, String difficulty, int quizLength) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        long result;
+
+        contentValues.put(HS_COLUMN_SCORE, score);
+        contentValues.put(HS_COLUMN_CATEGORY, category);
+        contentValues.put(HS_COLUMN_DIFFICULTY, difficulty);
+        contentValues.put(HS_COLUMN_QUIZ_LENGTH, quizLength);
+        result = db.insert(HS_TABLE_NAME, null, contentValues);
+
+
+        if (result == TypeUtil.RETURN_ERROR) {
+            return false;
+        }
+
+        manageHSTableSize();
+
+        return true;
+    }
+
+    //Removes the worst of the top scores if the table is "full"
+    private void manageHSTableSize() {
+
+        Cursor cursor = getAllHighScores();
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        while (cursor.getCount() > MAX_NUM_SCORES) {
+            db.delete(HS_TABLE_NAME,HS_COLUMN_ID + " = (SELECT MIN (" + HS_COLUMN_ID + ") FROM (SELECT * FROM " + HS_TABLE_NAME + " WHERE " + HS_COLUMN_SCORE + " = (SELECT MIN(" + HS_COLUMN_SCORE + ") FROM " + HS_TABLE_NAME + ")))", null);
+
+            cursor = getAllHighScores();
+        }
+    }
+
+    /*
+     * Clears the high scores from the database
+     * @return Integer - Returns the number of rows deleted
+     *
+     * @author dnoel
+     */
+    public Integer clearHighScores() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.delete(HS_TABLE_NAME, null, null);
+    }
+
+    /*
+     * Returns series of strings corresponding to all rows in High Scores Table
+     * @return Cursor res - Cursor containing all high scores
+     *
+     * @author dnoel
+     */
+    public Cursor getAllHighScores() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor res = db.rawQuery("SELECT * from " + HS_TABLE_NAME + " ORDER BY " + HS_COLUMN_SCORE + " DESC", null);
+        return res;
+    }
+
+    /*
+     * Returns The best score in the High Scores Table
+     * @return Cursor res - Cursor containing top score
+     *
+     * @author dnoel
+     */
+    public Cursor getTopHighScore() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor res = db.rawQuery("SELECT MAX("+ HS_COLUMN_SCORE +") from " + HS_TABLE_NAME, null);
+        return res;
+    }
 }

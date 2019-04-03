@@ -44,6 +44,7 @@ public class ClassicModeActivity extends BaseActivity {
             int amount = (int) spinnerNumber.getSelectedItem();
             TriviaCategory category = (TriviaCategory) spinnerCategory.getSelectedItem();
             TriviaDifficulty difficulty = (TriviaDifficulty) spinnerDifficulty.getSelectedItem();
+            isCustomGame = false;
 
             //Create the query for the openTDB database
             TriviaQuery query = new TriviaQuery.Builder(amount)
